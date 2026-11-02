@@ -1,0 +1,17 @@
+'use strict';
+const fs=require('fs'),path=require('path'),C=require('../src/comparison');
+const root=path.resolve(__dirname,'..'),raw=path.join(root,'research/obstacles'),assets=path.join(root,'assets/result');fs.mkdirSync(raw,{recursive:true});fs.mkdirSync(assets,{recursive:true});
+const base={N:18,k:3,duration:24,dt:.2,angularBins:120,radialBins:12,seed:2718};
+const cases=[['no_obstacles_k1',{obstacles:[],k:1,density:'uniform'}],['no_obstacles_k3',{obstacles:[],density:'uniform'}],['no_obstacles_k7',{obstacles:[],k:7,density:'uniform'}],['three_obstacles',{}],['five_obstacles',{obstacles:C.presets.five}],['three_seed31415',{seed:31415,placement:'random',initialMass:'equal'}],['three_seed1618',{seed:1618,placement:'random'}],['fixed_sectors',{boundary:'fixed'}],['failure_single',{N:50,k:7,duration:80,faultTime:8,failedId:13,initialMass:'equal',policy:'single'}],['failure_complement',{N:50,k:7,duration:80,faultTime:8,failedId:13,initialMass:'equal',policy:'complement'}],['failure_switch',{N:50,k:7,duration:80,faultTime:8,failedId:13,initialMass:'equal',policy:'switch'}],['budget_blocked',{roundBudget:2}],['radio_blocked',{carrier:'range',radioRange:.1}],['refined_three',{angularBins:240,radialBins:24}]];
+const requested=new Set(process.argv.slice(2));for(const name of requested)if(!cases.some(c=>c[0]===name))throw Error('Unknown benchmark: '+name);
+const summaryPath=path.join(assets,'obstacle_benchmarks.json'),results=requested.size&&fs.existsSync(summaryPath)?JSON.parse(fs.readFileSync(summaryPath,'utf8')).cases.filter(c=>!requested.has(c.name)):[];
+for(const [name,opts]of cases.filter(c=>!requested.size||requested.has(c[0]))){const start=performance.now(),p=new C.Comparison({...base,...opts}),initialPositionsIdentical=JSON.stringify(p.sector.agents)===JSON.stringify(p.voronoi.agents),data=p.run();fs.writeFileSync(path.join(raw,name+'.json'),JSON.stringify(data));const methods={};
+ for(const method of ['sector','voronoi']){const run=p[method],h=run.history,first=h[0],last=h.at(-1);methods[method]={status:run.status,reason:run.reason||null,initial:first,final:last,maxMotionIncrease:Math.max(...h.map(r=>r.motionCostDelta)),maxBoundaryIncrease:Math.max(...h.map(r=>r.boundaryCostDelta)),history:h.filter((_,i)=>i%5===0||i===h.length-1)};}
+ results.push({name,settings:p.cfg,points:p.domain.samples.length,initialPositionsIdentical,...methods});
+ if(name==='three_obstacles'){
+  const maps={samples:p.domain.samples.map(s=>s.p),voronoiOwners:p.voronoi.current.owners.map(o=>o.map(i=>p.voronoi.agents[i].id)),theta:p.sector.x.map(x=>p.domain.inverse(x))};fs.writeFileSync(path.join(raw,'figure_map.json'),JSON.stringify(maps));
+ }
+ console.log(JSON.stringify({name,status:[p.sector.status,p.voronoi.status],seconds:(performance.now()-start)/1000,sectorH:methods.sector.final.cost,voronoiH:methods.voronoi.final.cost,sectorMassError:methods.sector.final.massError}));
+}
+results.sort((a,b)=>cases.findIndex(c=>c[0]===a.name)-cases.findIndex(c=>c[0]===b.name));
+const report={schema:'matched-obstacle-benchmarks-v1',cases:results,interpretation:['All runs use the actual comparison engine; no smoothed cost envelopes.','Coarse quadrature benchmarks are not continuous-domain performance certificates.','Fault trajectories retain survivor positions; no parked failed robot.','Physical safety can prevent convergence to unconstrained centroids.','All-gather routing is deliberately matched; no communication-efficiency winner is claimed.']};fs.writeFileSync(summaryPath,JSON.stringify(report,null,2));

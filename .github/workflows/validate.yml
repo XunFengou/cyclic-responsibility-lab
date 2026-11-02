@@ -12,6 +12,8 @@ jobs:
           node-version: '22'
       - run: npm test
       - run: node tests/viewer-harness.cjs
+      - run: node tests/comparison-viewer-harness.cjs
+      - run: node tests/validate-benchmarks.cjs
       - run: npm run build
       - run: node tests/validate-build.cjs
       - uses: actions/upload-artifact@v4

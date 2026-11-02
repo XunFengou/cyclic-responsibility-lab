@@ -17,6 +17,8 @@ Core tests and the static build have no external package dependency:
 ```text
 node tests/run-tests.cjs
 node tests/viewer-harness.cjs
+node tests/obstacle-tests.cjs
+node tests/comparison-viewer-harness.cjs
 node scripts/build.mjs
 node tests/validate-build.cjs
 node scripts/serve.mjs
@@ -35,6 +37,17 @@ Edit `src/index.html`, `src/viewer.js`, `src/engine.js`, `src/dynamics.js`, and
 interface, model explanations, and paper figure labels remain in English.
 
 ## Scientific scope
+
+The matched multi-obstacle comparison is `src/Obstacle_Comparison.html`, with
+`src/comparison.js`, `src/comparison-viewer.js`, and `docs/Obstacle_Comparison.md`.
+It compares cyclic sector responsibility against actual nearest-k Voronoi
+dominant regions on identical demand quadrature and initial states. Both use
+single-integrator motion, the same velocity safety projection, exact swept disk
+collision checks, and routed full snapshots. The page supports custom obstacle
+unions, failures, complementary orders, packet budgets, common geometric cost,
+load imbalance, actual inputs, and visibility diagnostics. Safety-induced traps
+are retained and reported. Run `node scripts/run-obstacle-benchmarks.cjs` and
+MATLAB `plot_obstacle_comparison` to reproduce the new comparison figures.
 
 Six plant choices implement actual state equations: single integrator, double
 integrator, orders 3/4/5, unicycle, differential drive, and an exact-model fully
