@@ -1,0 +1,13 @@
+/dist/
+/research/
+/test-results/
+/node_modules/
+/preview-tmp/
+/.sites-runtime/
+/.env
+/.env.*
+!/.env.example
+*.log
+*.zip
+*.tar.gz
+*.tmp

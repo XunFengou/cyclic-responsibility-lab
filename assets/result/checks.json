@@ -1,0 +1,48 @@
+{
+  "created": "2026-10-30T02:03:20.447Z",
+  "engine": "engine.js",
+  "tests": [
+    {
+      "name": "The cumulative-mass map realizes nonempty atoms and periodic moments",
+      "passed": true
+    },
+    {
+      "name": "All packet protocols equal the local cyclic heat operator",
+      "passed": true
+    },
+    {
+      "name": "Uniform pre-failure masses give equal residue size but different excited orbit labels",
+      "passed": true
+    },
+    {
+      "name": "One failure leaves exactly the predicted blind residue",
+      "passed": true
+    },
+    {
+      "name": "Routing changes cost and elapsed time while preserving the mass dynamics",
+      "passed": true
+    },
+    {
+      "name": "Role reassignment transfers boundaries without changing the mass spectrum",
+      "passed": true
+    },
+    {
+      "name": "A disconnected snapshot blocks the update instead of claiming convergence",
+      "passed": true
+    },
+    {
+      "name": "Large cases distinguish common quotient from service quotient",
+      "passed": true
+    }
+  ],
+  "cases": 20,
+  "maxOperatorError": 3.0531133177191805e-16,
+  "maxWindowError": 0,
+  "notes": [
+    "Communication is explicit reliable synchronous store-and-forward with epoch barriers.",
+    "Ring routing is an ideal carrier and has no range guarantee.",
+    "Large-N rows are analytical predictions.",
+    "Robot collision avoidance is not implemented.",
+    "Annulus motion uses feasible lifted polar coordinates; disk motion uses Euclidean centroid attraction."
+  ]
+}
