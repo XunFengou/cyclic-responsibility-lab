@@ -83,7 +83,7 @@ function initialAgents(cfg,domain){
 }
 class Run{
  constructor(method,cfg,domain,initial){this.method=method;this.cfg=cfg;this.domain=domain;this.agents=copy(initial);this.t=0;this.status='ready';this.events=[];this.history=[];this.paths=new Map(this.agents.map(a=>[a.id,[a.p.slice()]]));this.effort=0;this.pathLength=0;this.faultDone=false;this.minimumSweptMargin=Infinity;this.lastInput=0;this.lastPeak=0;this.lastBoundary=0;this.lastMotionDelta=0;this.lastBoundaryDelta=0;this.lastScale=1;this.epoch=0;
-  const random=Lab.rng(cfg.seed+7),m=Array.from({length:cfg.N},(_,i)=>cfg.initialMass==='equal'?1:Math.exp(.5*Math.sin(TAU*i/cfg.N)+.4*(random()-.5)));let x=0;this.x=m.map(v=>{const old=x;x+=v/sum(m);return old;});
+  const random=Lab.rng(cfg.seed+7),m=Array.from({length:cfg.N},(_,i)=>cfg.initialMass==='equal'?1:Math.exp(.5*Math.sin(TAU*i/cfg.N)+.4*(random()-.5)));let x=cfg.phaseOffset;this.x=m.map(v=>{const old=x;x+=v/sum(m);return old;});
   this.network=new Lab.Network({carrier:cfg.carrier,radioRange:cfg.radioRange,lineOfSight:cfg.lineOfSight,cutTime:null});this.record();
  }
  assignment(){return this.method==='sector'?sectorAssignment(this.domain,this.x,this.cfg.k):voronoiAssignment(this.domain,this.agents,this.cfg.k);}
@@ -131,7 +131,7 @@ class Run{
 }
 class Comparison{
  constructor(options={}){
-  this.cfg=Object.assign({N:18,k:3,obstacles:presets.three,density:'hotspots',angularBins:240,radialBins:18,seed:2718,placement:'ring',initialMass:'unequal',boundary:'moving',policy:'complement',dt:.1,boundaryGain:1,gain:1,speed:.45,alpha:3,robotRadius:.012,clearance:.004,duration:40,faultTime:null,failedId:4,carrier:'ring',radioRange:.9,lineOfSight:true,roundBudget:1000000,sensingRange:2.1,switchPeriod:3},copy(options));
+  this.cfg=Object.assign({N:18,k:3,obstacles:presets.three,density:'hotspots',angularBins:240,radialBins:18,seed:2718,placement:'ring',initialMass:'unequal',phaseOffset:0,boundary:'moving',policy:'complement',dt:.1,boundaryGain:1,gain:1,speed:.45,alpha:3,robotRadius:.012,clearance:.004,duration:40,faultTime:null,failedId:4,carrier:'ring',radioRange:.9,lineOfSight:true,roundBudget:1000000,sensingRange:2.1,switchPeriod:3},copy(options));
   const c=this.cfg;check(Number.isInteger(c.N)&&c.N>=3&&c.N<=80&&Number.isInteger(c.k)&&c.k>=1&&c.k<=c.N,'Require integer 3 <= N <= 80 and 1 <= k <= N.');
   check(Array.isArray(c.obstacles)&&c.obstacles.length<=20,'Use at most 20 circular obstacles.');
   c.obstacles.forEach(o=>check(o&&['x','y','r'].every(h=>Number.isFinite(o[h]))&&o.r>0&&Math.hypot(o.x,o.y)+o.r<=.90,'Each obstacle needs finite x, y, r > 0 and must lie inside radius 0.90.'));
@@ -140,6 +140,7 @@ class Comparison{
   check(Number.isInteger(c.angularBins)&&c.angularBins>=60&&c.angularBins<=1440&&Number.isInteger(c.radialBins)&&c.radialBins>=8&&c.radialBins<=80,'Invalid quadrature resolution.');
   for(const [key,values]of Object.entries({density:['uniform','hotspots'],placement:['ring','random'],initialMass:['equal','unequal'],boundary:['moving','fixed'],policy:['single','complement','switch'],carrier:['ring','range']}))check(values.includes(c[key]),'Unknown '+key);
   check(Number.isInteger(c.seed)&&c.seed>=0&&c.seed<=4294967295,'Seed must be a 32-bit unsigned integer.');
+  check(Number.isFinite(c.phaseOffset)&&c.phaseOffset>=0&&c.phaseOffset<1,'Initial phase must be in [0,1) mass turns.');
   check(c.faultTime===null||(Number.isFinite(c.faultTime)&&c.faultTime>=0&&c.N>c.k&&Number.isInteger(c.failedId)&&c.failedId>=1&&c.failedId<=c.N),'Invalid announced removal. It must leave N >= k.');
   this.domain=new Domain(c);const agents=initialAgents(c,this.domain);this.initial=copy(agents);this.sector=new Run('sector',c,this.domain,agents);this.voronoi=new Run('voronoi',c,this.domain,agents);
  }

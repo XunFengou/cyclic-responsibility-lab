@@ -1,15 +1,16 @@
 {
   "name":"cyclic-responsibility-research-lab",
-  "version":"5.0.0",
+  "version":"6.0.0",
   "private":true,
   "description":"Canonical website source for cyclic responsibility and distributed multi-dynamics sector coverage.",
   "scripts":{
-    "test":"node tests/run-tests.cjs && node tests/obstacle-tests.cjs",
+    "test":"node tests/run-tests.cjs && node tests/obstacle-tests.cjs && node tests/structure-tests.cjs",
     "build":"node scripts/build.mjs",
     "preview":"node scripts/serve.mjs",
-    "test:viewer":"node tests/viewer-harness.cjs && node tests/comparison-viewer-harness.cjs",
+    "test:viewer":"node tests/viewer-harness.cjs && node tests/comparison-viewer-harness.cjs && node tests/structure-viewer-harness.cjs",
     "experiments":"node scripts/run-research.cjs",
-    "experiments:obstacles":"node scripts/run-obstacle-benchmarks.cjs"
+    "experiments:obstacles":"node scripts/run-obstacle-benchmarks.cjs",
+    "experiments:structure":"node scripts/run-structure-benchmarks.cjs"
   },
   "engines":{"node":">=20"}
 }

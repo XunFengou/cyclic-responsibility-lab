@@ -38,6 +38,21 @@ interface, model explanations, and paper figure labels remain in English.
 
 ## Scientific scope
 
+The new `src/Structure_Comparison.html` separates arithmetic mode scans, nested
+fixed-site geometry, same-snapshot packet replays, failure-location exposure, and
+a certified fractional capacity-constrained reference. Its assumptions and
+proofs are in `docs/Structural_Comparisons.md`. It includes phase alignment and
+counterchecks in which the cyclic template coincides with Voronoi, frozen cached
+Voronoi has no steady traffic, or a common safety snapshot removes any extra
+responsibility communication saving. Do not describe the responsibility-only
+byte ratios as universal full-system savings.
+
+Reproduce with `node scripts/run-structure-benchmarks.cjs`, then MATLAB
+`plot_structure_comparison`. Validate with `node tests/structure-tests.cjs`,
+`node tests/structure-viewer-harness.cjs`, and
+`node tests/validate-structure-benchmarks.cjs`. The physical comparison accepts
+an initial cyclic phase offset without changing the robot initial positions.
+
 The matched multi-obstacle comparison is `src/Obstacle_Comparison.html`, with
 `src/comparison.js`, `src/comparison-viewer.js`, and `docs/Obstacle_Comparison.md`.
 It compares cyclic sector responsibility against actual nearest-k Voronoi

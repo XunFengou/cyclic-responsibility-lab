@@ -8,4 +8,5 @@ for(const name of fs.readdirSync(dist))if(name.endsWith('.html')){
  }
 }
 for(const name of ['index.html','style.css','viewer.js','engine.js','dynamics.js','theory.html','publication.html','sitemap.xml','robots.txt','result/dynamics_checks.json','Obstacle_Comparison.html','comparison.js','comparison-viewer.js','comparison-theory.html','result/obstacle_checks.json','result/obstacle_benchmarks.json'])assert(fs.existsSync(path.join(dist,name)),name);
+for(const name of ['Structure_Comparison.html','structure.js','structure-viewer.js','structure-theory.html','result/structure_checks.json','result/structure_benchmarks.json','result/S01_arithmetic_and_repair.png','result/S02_protocol_replay.png','result/S03_faults_and_capacity.png'])assert(fs.existsSync(path.join(dist,name)),name);
 const result={status:'passed',pages,localReferences:references,englishInterface:true,indexHash:crypto.createHash('sha256').update(fs.readFileSync(path.join(dist,'index.html'))).digest('hex'),liveBrowserVerification:false};fs.writeFileSync(path.join(root,'test-results/build_checks.json'),JSON.stringify(result,null,2));console.log(JSON.stringify(result));
