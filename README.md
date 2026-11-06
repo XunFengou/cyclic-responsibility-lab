@@ -12,6 +12,12 @@ identity in `.openai/hosting.json`; reuse it for future updates.
 
 ## Development
 
+Start with [the full operating guide](docs/Running_Guide.md). The homepage now
+focuses on the core experiment. Failures, six-model dynamics, matched comparisons,
+offline ROS 2 and the permanent rightmost Theory center have separate entrances.
+Random feasible initial positions and independent position/mass seeds are the
+homepage default. The ROS 2 bench does not connect to or command real hardware.
+
 Core tests and the static build have no external package dependency:
 
 ```text
@@ -19,6 +25,13 @@ node tests/run-tests.cjs
 node tests/viewer-harness.cjs
 node tests/obstacle-tests.cjs
 node tests/comparison-viewer-harness.cjs
+node tests/structure-tests.cjs
+node tests/structure-viewer-harness.cjs
+node tests/lab-tests.cjs
+node tests/lab-viewer-harness.cjs
+node tests/ros2-viewer-harness.cjs
+node tests/validate-benchmarks.cjs
+node tests/validate-structure-benchmarks.cjs
 node scripts/build.mjs
 node tests/validate-build.cjs
 node scripts/serve.mjs
@@ -32,8 +45,12 @@ Standard Node installations can use the equivalent `npm test`, `npm run build`,
 and `npm run preview` scripts. This computer's bundled runtime exposes `node`;
 the direct commands above do not require npm on PATH.
 
-Edit `src/index.html`, `src/viewer.js`, `src/engine.js`, `src/dynamics.js`, and
-`docs/`. Do not treat generated `dist/` as the canonical source. The website
+Edit `src/` and `docs/`. Core pages share `lab-panel.partial`, `lab-model.js`,
+`lab-viewer.js` and `lab-plots.js`. The original six-model simulator is preserved
+as `Dynamics.html` with `viewer.js`. Navigation comes from `navigation.json`;
+Theory entries come from `theory-catalog.json`. The build expands these pieces
+and renders the English Markdown documents. Do not treat generated `dist/` as
+the canonical source. The website
 interface, model explanations, and paper figure labels remain in English.
 
 ## Scientific scope

@@ -2,6 +2,8 @@
 const root=path.resolve(__dirname,'..'),dist=path.join(root,'dist');let references=0,pages=0;
 for(const name of fs.readdirSync(dist))if(name.endsWith('.html')){
  const content=fs.readFileSync(path.join(dist,name),'utf8');assert(!/[\u3400-\u9fff]/.test(content),name+' has non-English interface text.');pages++;
+ if(!['START_HERE.html','Distributed_Sector_Simulation.html'].includes(name)){const nav=content.match(/<nav class="lab-nav"[^>]*>([\s\S]*?)<\/nav>/);assert(nav,name+' lacks shared navigation');const links=[...nav[1].matchAll(/<a\b[^>]*>([^<]*)<\/a>/g)];assert.equal(links.at(-1)[1],'Theory',name+' must end navigation with Theory');assert.equal(links.length,8);}
+ assert(!content.includes('<!-- LAB_PANEL -->')&&!content.includes('<!-- THEORY_CATALOG -->'),'Unexpanded source component in '+name);
  for(const m of content.matchAll(/(?:src|href)="([^"]+)"/g)){
   const p=m[1];if(/^(https?:|data:|#|mailto:)/.test(p)||p.includes('&quot;'))continue;
   const file=path.resolve(dist,p.split('#')[0].split('?')[0]);assert(file.startsWith(dist+path.sep));assert(fs.existsSync(file),name+' links to missing '+p);references++;
@@ -9,4 +11,6 @@ for(const name of fs.readdirSync(dist))if(name.endsWith('.html')){
 }
 for(const name of ['index.html','style.css','viewer.js','engine.js','dynamics.js','theory.html','publication.html','sitemap.xml','robots.txt','result/dynamics_checks.json','Obstacle_Comparison.html','comparison.js','comparison-viewer.js','comparison-theory.html','result/obstacle_checks.json','result/obstacle_benchmarks.json'])assert(fs.existsSync(path.join(dist,name)),name);
 for(const name of ['Structure_Comparison.html','structure.js','structure-viewer.js','structure-theory.html','result/structure_checks.json','result/structure_benchmarks.json','result/S01_arithmetic_and_repair.png','result/S02_protocol_replay.png','result/S03_faults_and_capacity.png'])assert(fs.existsSync(path.join(dist,name)),name);
+for(const name of ['Failures.html','Dynamics.html','Comparisons.html','ROS2.html','Guide.html','Theory_Center.html','Running_Guide.md','cost-theory.html','robot-theory.html','surface-theory.html','ros2-contract.html','lab-model.js','lab-viewer.js','lab-plots.js','ros2-contract.js','ros2-viewer.js','site-shell.css','result/lab_checks.json'])assert(fs.existsSync(path.join(dist,name)),name);
+const home=fs.readFileSync(path.join(dist,'index.html'),'utf8'),guide=fs.readFileSync(path.join(dist,'Guide.html'),'utf8');assert(home.includes('labLoadPlot')&&home.includes('labInputPlot')&&home.includes('labCostPlot'));assert(guide.includes('id="metric-dictionary"')&&guide.includes('id="ros-2-and-enterprise-robots"'));assert(guide.includes('<table>'));assert(home.includes('Random feasible positions'));
 const result={status:'passed',pages,localReferences:references,englishInterface:true,indexHash:crypto.createHash('sha256').update(fs.readFileSync(path.join(dist,'index.html'))).digest('hex'),liveBrowserVerification:false};fs.writeFileSync(path.join(root,'test-results/build_checks.json'),JSON.stringify(result,null,2));console.log(JSON.stringify(result));

@@ -1,7 +1,7 @@
 'use strict';
 // This is an event-handler/DOM contract unit test, NOT live browser QA.
 const fs=require('fs'),path=require('path'),vm=require('vm'),assert=require('assert');
-const root=path.resolve(__dirname,'..'),html=fs.readFileSync(path.join(root,'src/index.html'),'utf8'),source=fs.readFileSync(path.join(root,'src/viewer.js'),'utf8');
+const root=path.resolve(__dirname,'..'),html=fs.readFileSync(path.join(root,'src/Dynamics.html'),'utf8'),source=fs.readFileSync(path.join(root,'src/viewer.js'),'utf8');
 const nodes=new Map(),paintCalls=[];
 const drawing=new Proxy({}, {get:(o,k)=>k in o?o[k]:(...args)=>{paintCalls.push(k);},set:(o,k,v)=>(o[k]=v,true)});
 function element(id,value=''){return {id,value,checked:false,disabled:false,textContent:'',innerHTML:'',style:{},classList:{toggle(){}},parentElement:{clientWidth:630},events:{},addEventListener(t,f){this.events[t]=f;},removeAttribute(){},setAttribute(){},getContext(){return drawing;},getBoundingClientRect(){return {left:0,width:600};}};}

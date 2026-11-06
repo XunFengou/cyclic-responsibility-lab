@@ -1,0 +1,10 @@
+[
+  {"title":"Cyclic operators and quotient groups","href":"algebra-theory.html","status":"Definitions and proofs","description":"Responsibility hypergraphs, group algebra, orbit decomposition, Fourier dual and the distinction between task and carrier graphs."},
+  {"title":"Coordination costs, gcd and complementarity","href":"cost-theory.html","status":"New proofs and metric definitions","description":"Positive boundary updates, blind energies, joint N,k scale, persistent switching and exact single-removal residue."},
+  {"title":"Robot models and precise guarantees","href":"theory.html","status":"Implemented six-model baseline","description":"Native plant equations, centroid tracking, the conditions for cost descent and limits of safety/convergence claims."},
+  {"title":"Fair structural comparisons","href":"structure-theory.html","status":"Tested numerical and packet studies","description":"Balanced capacity reference, phase control, symmetric coincidence, communication budgets and failure-location studies."},
+  {"title":"Obstacles and order-k Voronoi","href":"comparison-theory.html","status":"Implemented safe single-integrator comparison","description":"Matched quadrature, circular-hole unions, full nearest-k dominant regions and visibility diagnostics."},
+  {"title":"Enterprise whole-body dynamics","href":"robot-theory.html","status":"Source review and integration proposal","description":"PAL TIAGo Pro / TIAGo++ and Unitree G1: configuration manifolds, constrained EL dynamics, contacts and observation quality."},
+  {"title":"ROS 2 telemetry and adapter contract","href":"ros2-contract.html","status":"Implemented offline validation and replay","description":"Pinned models, native joint units, frames, timestamps and provenance. No live actuation is enabled."},
+  {"title":"Perforated Riemannian surfaces","href":"surface-theory.html","status":"Future geometry extension","description":"Metric volume, intrinsic costs, circle-valued coordinates and the conditions under which cyclic incidence survives."}
+]

@@ -1,0 +1,126 @@
+# Cyclic Responsibility Lab: operating and reproduction guide
+
+## Start here
+
+The website interface, scientific labels and this guide are English. All computation in the simulation pages is browser-local. Sharing a settings link recreates the starting experiment; it does not synchronize live states between visitors. Download JSON to preserve a complete recorded run.
+
+| Navigation | Purpose |
+| --- | --- |
+| Overview | Main N,k experiment: mass balance, actual inputs, geometry and Fourier response |
+| Failures | Matched policies, announced removal and exact pre/post event replay |
+| Dynamics | Six integrated plant models with native control units |
+| Comparisons | Same-environment Voronoi, capacity and communication studies |
+| ROS 2 | Enterprise robot research, offline telemetry and mission adapter draft |
+| Guide | This operating guide and downloadable Markdown |
+| Theory | Permanent rightmost entrance to definitions, proofs and future extensions |
+
+## First experiment
+
+- On Overview choose N=24, k=6 and Seeded unequal masses. Random feasible positions are the default; position and mass seeds are independent.
+- Press Run experiment. Press it again to pause. One step advances 0.2 motion seconds. Steps per display frame changes display throughput, not the model time step.
+- Read responsibility-load error and basic-mass/blind energies together. Small load error with nonzero blind energy means the service operator cannot observe part of the partition imbalance.
+- Click a robot or choose its persistent physical ID. Gold shows its k-sector responsibility, the square is its unconstrained centroid, and the arrow is its applied velocity. A centroid may lie in a hole.
+- Hover a time plot to read the nearest actual recorded samples. Curves connect sampled values; there is no smoothing or decreasing envelope. Applied-input samples are time-stamped at the end of the interval over which the command was held.
+- Change a setting. The status reports pending settings; Run, One step or Apply / reset starts a new trial. Display-only controls do not reset the experiment.
+- New random start changes only the position seed. Use the same mass seed and paired position seed when comparing controllers.
+- Download JSON, CSV or the performance PNG. Copy settings link shares initialization only. Keep the map, density, seeds, policies, quadrature, safety settings, duration and code version with every reported experiment.
+
+## Three quick algebra tests
+
+- Blind-mode probe sets N24,k6 and a pure nonconstant blind harmonic with relative mass RMS 0.25. The load error stays near numerical zero while blind energy stays 0.03125 under service-only control. This is not successful equal-atom balancing.
+- Repeat with complementary control adds order 7 to boundary updates; physical service remains order 6. The blind harmonic becomes observable to the controller and decays.
+- Coprime sets N25,k6, whose exact blind dimension is zero. Slow finite-time decay is still possible; gcd=1 is not a uniform rate theorem.
+
+If a blind harmonic is requested at coprime N,k, the UI explains why it is unavailable. If k=N, all nonconstant harmonics are blind, so an Observable harmonic probe is unavailable. The physical canvas supports 3<=N<=80 for tractable packet/geometry computation. For N=1000,k=21 use the large-N arithmetic study linked above the setup panel or the algebra explorer.
+
+## Metric dictionary
+
+Demand mass is normalized to 1, m_i is the basic atom mass, ell_i is the k-window load and d=gcd(N,k). Ideal basic mass is 1/N; ideal responsibility mass is k/N. Population-dependent targets are recomputed after removal.
+
+| Display | Definition | Interpretation |
+| --- | --- | --- |
+| Load error | RMS(ell-k/N)/(k/N) | Equal responsibility workloads when zero |
+| Mass error | RMS(m-1/N)/(1/N) | Equal underlying atoms when zero |
+| Blind error | RMS(orbitMean(m,d)-1/N)/(1/N) | Service-invisible part of the atom imbalance |
+| E_mass | massError^2/2 | Total coordination energy; dimensionless |
+| E_blind | blindError^2/2 | Projected blind coordination energy; invariant for one service order |
+| E_service | loadError^2/2 | Available in exports; zero does not imply equal atoms when d>1 |
+| E_K | Mean relative order-load error squared / 2 | Fixed control-family energy; available in exports |
+| Applied velocity RMS | sqrt(mean_i norm(u_i)^2) | Actual safe, scaled robot command in domain units/s |
+| Boundary input RMS | RMS(dx_i/dt) | Cumulative-demand ray input in mass fraction/s, not robot input |
+| H | Assigned squared-distance integral / (2k) | Euclidean geometric service cost, squared domain units |
+| Centroid lower bound | Sum(second moment - first moment squared / load)/(2k) | Unconstrained bound for the displayed partition, not necessarily feasible |
+| Clearance | Minimum wall, obstacle and pair clearance | Domain units after subtracting robot radii; negative means infeasible |
+| Fourier gain G_j | Squared magnitude of R_k(j)/k | Structural response, independent of the initial state |
+
+Log plots floor values at 10^-15 for display only. Exported values retain their numerical values. These energies are not mechanical energy. H is not replaced with a monotone envelope. Changing rays, changing assignments or removing robots can increase H; constrained robots need not reach unconstrained centroids. A completed duration is not a convergence certificate.
+
+Read [gcd-sensitive costs and proofs](cost-theory.html) for the classification, multi-order theorem and counterexample showing H does not determine gcd.
+
+## Failure workflow
+
+Open Failures. Default N50->49, service k7, equal initial masses and three holes isolate the effect of a single announced removal. Single and complementary policies start with identical robot positions and atoms. Optionally add persistent switching. Unequal or harmonic profiles let the policies diverge before failure; use equal masses for a clean fault-only comparison.
+
+Choose the failed physical ID and removal time before starting. Before removal and After removal compute to the event if needed and select exact instantaneous snapshots. Survivor positions and persistent IDs are unchanged by the event. The red cross marks the removed position only once that robot is absent. The robot is removed, not left parked as an obstacle. The left boundary of its atom is deleted, merging two adjacent positive atoms. k must remain no greater than the surviving population.
+
+The timeline scrubs recorded states; Resume continues computation from the latest state, not from a rewound state. Event snapshots have no new applied command: CSV fields for command-dependent quantities are empty there. Normal held-input records before/after the event remain intact. Population, gcd and blind dimension are shown in the event banner. Exact equal-mass single-removal residual formulas do not apply to arbitrary unequal states or multiple failures.
+
+The new dashboard only models one announced removal. Other frozen-responsibility or failed-obstacle semantics need a different model. The structural comparison page contains separate failed-location and multi-failure arithmetic studies; do not relabel them as physical multi-failure validation.
+
+## Dynamics workflow
+
+Dynamics opens a fixed-partition, no-failure experiment to isolate actual plant behavior. Choose single/double/higher-order integrator, unicycle, differential drive or the two-coordinate Euler-Lagrange mechanism. Read its equation and native-input labels before comparing curves. Higher derivatives start at zero. Euler-Lagrange holding force can remain nonzero at rest.
+
+Cartesian higher-order and nonholonomic examples do not inherit arbitrary-obstacle safety from the new homepage. The older annular single-integrator chart has its own containment result; it is not an arbitrary multi-obstacle collision-avoidance proof. Native acceleration, jerk, wheel-rate and force inputs cannot be compared as a single physical-energy unit. The page reports model-normalized effort with that limitation. See [models and guarantees](theory.html).
+
+## Fair comparison workflow
+
+Comparisons separates physical motion from arithmetic and packet benchmarks. The physical comparison uses the same initial physical sites, demand quadrature, obstacle map, speed and safety model for cyclic and full order-k Voronoi dominant regions. Nearest-k minimizes assigned distance cost at fixed positions, so its lower H is expected. Evaluate load error, information requirements, packet cost and repair alongside H; do not manufacture a weighted score to make one method win.
+
+The structural lab contains a balanced fractional-flow reference, cyclic phase control, a symmetric coincidence test, nested population sweeps, routed protocol replays and failure/capacity studies. Its phase search and capacity solver are offline references. Protocol round counts are accounting, not a proven delayed whole-body robot simulation. Preserved PNGs are explained individually in the archived figure guide; they are not new live simulations.
+
+## ROS 2 and enterprise robots
+
+The ROS 2 page is an offline integration bench, with no connected robot and no command publisher. Select TIAGo Pro, TIAGo++ or G1 and download a mission adapter draft. It deliberately requires the exact model revision, vendor interface and topic mapping. Selecting a platform does not instantiate its full dynamics.
+
+Use the view-angle slider to see why two responsible robots can still give singular bearing information. Then load the explicitly synthetic contract example or import telemetry JSON. Choose physical ID, joint and recorded frame; efforts retain N or N m units. Invalid files are rejected while the previous valid replay remains. The contract limits files to 5 MB and 1000 frames. Declared hardware provenance is not independently authenticated by the viewer.
+
+Read [enterprise robot dynamics](robot-theory.html) and [ROS 2 contract](ros2-contract.html). Full-body simulation, contact-aware control and hardware tests remain future work. This update does not claim they have run.
+
+## Reproduce from source
+
+Use Node.js >=20 (CI uses 22). There are no production package dependencies. From the canonical site directory run:
+
+```text
+node tests/run-tests.cjs
+node tests/obstacle-tests.cjs
+node tests/structure-tests.cjs
+node tests/lab-tests.cjs
+node tests/viewer-harness.cjs
+node tests/comparison-viewer-harness.cjs
+node tests/structure-viewer-harness.cjs
+node tests/lab-viewer-harness.cjs
+node tests/ros2-viewer-harness.cjs
+node tests/validate-benchmarks.cjs
+node tests/validate-structure-benchmarks.cjs
+node scripts/build.mjs
+node tests/validate-build.cjs
+node scripts/serve.mjs
+```
+
+Open the local URL printed by the server. A static HTTP server is the supported reproduction path; do not infer a failed file:// script policy is a simulation failure. dist is generated; edit src and docs. Keep the existing hosting identity. A GitHub source commit and a Site deployment are separate operations. Source access does not grant website-publishing rights.
+
+Test reports distinguish numerical tests, synthetic DOM/event harnesses, static resources and live HTTP verification. Synthetic DOM tests are not real browser QA. Previous native browser safety checks prevented verified browser interaction; this release must retain that verification limit unless a permitted browser check later succeeds. Check your target browser and screen size before collecting publication screenshots.
+
+## Theory and future surfaces
+
+Theory is intentionally the last navigation item. Its catalog links operators/proofs, metric choices, dynamics, comparisons, whole-body robots and a future surface adapter. Add new documents to the central theory catalog to extend it without crowding the homepage. Several planar holes are not a curved-surface or positive-genus implementation. Intrinsic distance, metric volume, chart handling and feasible motion must be implemented and verified before enabling a Riemannian surface simulator.
+
+## Troubleshooting
+
+- Invalid N,k or impossible profile: correct the parameters and press Apply / reset; the previous trial is retained.
+- Run says blocked: inspect carrier/budget and the event log. Do not interpret a stopped run as convergence.
+- Load error is tiny but masses differ: inspect blind energy and Fourier roots; try the complementary controller.
+- Inputs approach zero but centroid excess remains: obstacles or other robots can constrain motion. Clearance and residual must be reported together.
+- H rises: compare boundary and motion contributions in the specialist pages. Only fixed-partition motion descent has the stated monotonicity guarantee.
+- Cannot find a page: use the seven-item top navigation. The older filenames remain available for existing links, but the homepage is now the core experiment.

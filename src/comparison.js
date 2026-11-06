@@ -71,7 +71,7 @@ function sweptSafe(agents,next,domain,cfg){
  }return true;
 }
 function initialAgents(cfg,domain){
- const random=Lab.rng(cfg.seed),agents=[],distance=2*cfg.robotRadius+cfg.clearance+.015;
+ const random=Lab.rng(cfg.positionSeed??cfg.seed),agents=[],distance=2*cfg.robotRadius+cfg.clearance+.015;
  for(let i=0;i<cfg.N;i++){let p=null;
   for(let tries=0;tries<30000;tries++){
    const onRing=tries===0&&cfg.placement==='ring',theta=onRing?TAU*(i+.5+.1*(random()-.5))/cfg.N:TAU*random(),r=onRing?.74+.06*(random()-.5):Math.sqrt(random())*(1-cfg.robotRadius-cfg.clearance-.01),q=[r*Math.cos(theta),r*Math.sin(theta)];
@@ -83,12 +83,14 @@ function initialAgents(cfg,domain){
 }
 class Run{
  constructor(method,cfg,domain,initial){this.method=method;this.cfg=cfg;this.domain=domain;this.agents=copy(initial);this.t=0;this.status='ready';this.events=[];this.history=[];this.paths=new Map(this.agents.map(a=>[a.id,[a.p.slice()]]));this.effort=0;this.pathLength=0;this.faultDone=false;this.minimumSweptMargin=Infinity;this.lastInput=0;this.lastPeak=0;this.lastBoundary=0;this.lastMotionDelta=0;this.lastBoundaryDelta=0;this.lastScale=1;this.epoch=0;
-  const random=Lab.rng(cfg.seed+7),m=Array.from({length:cfg.N},(_,i)=>cfg.initialMass==='equal'?1:Math.exp(.5*Math.sin(TAU*i/cfg.N)+.4*(random()-.5)));let x=cfg.phaseOffset;this.x=m.map(v=>{const old=x;x+=v/sum(m);return old;});
+  const random=Lab.rng(cfg.seed+7);let m;
+  if(cfg.initialMass==='harmonic'){const wave=Array.from({length:cfg.N},(_,i)=>Math.cos(TAU*cfg.harmonicIndex*i/cfg.N)),rms=Math.sqrt(sum(wave.map(v=>v*v))/cfg.N);m=wave.map(v=>1+cfg.harmonicRms*v/rms);}else m=Array.from({length:cfg.N},(_,i)=>cfg.initialMass==='equal'?1:Math.exp(.5*Math.sin(TAU*i/cfg.N)+.4*(random()-.5)));
+  let x=cfg.phaseOffset;this.x=m.map(v=>{const old=x;x+=v/sum(m);return old;});this.lastVelocityById=new Map(this.agents.map(a=>[a.id,[0,0]]));this.inputs=[{time:0,byId:this.agents.map(a=>({id:a.id,u:[0,0]}))}];
   this.network=new Lab.Network({carrier:cfg.carrier,radioRange:cfg.radioRange,lineOfSight:cfg.lineOfSight,cutTime:null});this.record();
  }
  assignment(){return this.method==='sector'?sectorAssignment(this.domain,this.x,this.cfg.k):voronoiAssignment(this.domain,this.agents,this.cfg.k);}
  orders(){const k=this.cfg.k,n=this.agents.length;if(this.cfg.policy==='single')return [k];const auxiliary=k<n?k+1:Math.max(1,k-1);if(this.cfg.policy==='switch')return [Math.floor(this.t/this.cfg.switchPeriod)%2?k:auxiliary];return [...new Set([k,auxiliary])];}
- remove(){const index=this.agents.findIndex(a=>a.id===this.cfg.failedId),before=this.agents.length;check(index>=0,'Failed ID is not active.');this.agents.splice(index,1);this.x.splice(index,1);this.faultDone=true;this.events.push({type:'announced removal',time:this.t,id:this.cfg.failedId,beforeN:before,afterN:this.agents.length,gcd:Lab.gcd(this.agents.length,this.cfg.k)});}
+ remove(){const index=this.agents.findIndex(a=>a.id===this.cfg.failedId),before=this.agents.length;check(index>=0,'Failed ID is not active.');const beforeState={time:this.t,agents:this.agents.map(a=>({id:a.id,p:a.p.slice()})),x:this.x.slice()};this.agents.splice(index,1);this.x.splice(index,1);this.lastVelocityById.delete(this.cfg.failedId);this.faultDone=true;const afterState={time:this.t,agents:this.agents.map(a=>({id:a.id,p:a.p.slice()})),x:this.x.slice()};this.events.push({type:'announced removal',time:this.t,id:this.cfg.failedId,beforeN:before,afterN:this.agents.length,gcd:Lab.gcd(this.agents.length,this.cfg.k),beforeState,afterState});}
  communicate(){
   const before=this.network.total.rounds;
   if(!this.network.setup(this.agents,this.domain,this.t,this.epoch)){this.status='blocked';this.reason='Disconnected carrier: complete snapshot unavailable.';return false;}
@@ -111,6 +113,7 @@ class Run{
   for(let j=0;j<45;j++){next=this.agents.map((a,i)=>a.p.map((v,h)=>v+dt*scale*velocities[i][h]));if(sweptSafe(this.agents,next,this.domain,this.cfg)&&cost(a.moments,next,this.cfg.k)<=oldCost+1e-13)break;scale/=2;}
   if(!sweptSafe(this.agents,next,this.domain,this.cfg)||cost(a.moments,next,this.cfg.k)>oldCost+1e-13){scale=0;next=this.agents.map(a=>a.p.slice());}
   this.lastScale=scale;this.lastInput=Math.sqrt(sum(velocities.map(v=>dot(v,v)*scale**2))/n);this.lastPeak=Math.max(...velocities.map(v=>norm(v)*scale));this.effort+=dt*n*this.lastInput**2;
+  this.lastVelocityById=new Map(this.agents.map((a,i)=>[a.id,velocities[i].map(v=>v*scale)]));this.inputs.push({time:this.t+dt,byId:this.agents.map(a=>({id:a.id,u:this.lastVelocityById.get(a.id).slice()}))});
   for(let i=0;i<n;i++){const p=this.agents[i].p,q=next[i];this.pathLength+=norm([q[0]-p[0],q[1]-p[1]]);this.minimumSweptMargin=Math.min(this.minimumSweptMargin,1-this.cfg.robotRadius-Math.max(norm(p),norm(q)),...this.domain.obstacles.map(o=>segmentDistance(p,q,[o.x,o.y])-o.r-this.cfg.robotRadius));for(let j=0;j<i;j++)this.minimumSweptMargin=Math.min(this.minimumSweptMargin,segmentDistance([p[0]-this.agents[j].p[0],p[1]-this.agents[j].p[1]],[q[0]-next[j][0],q[1]-next[j][1]],[0,0])-2*this.cfg.robotRadius);}
   this.agents.forEach((a,i)=>{a.p=next[i];this.paths.get(a.id).push(a.p.slice());});
   const afterMotion=this.method==='sector'?a:this.assignment(),afterMotionCost=cost(afterMotion.moments,next,this.cfg.k);this.lastMotionDelta=afterMotionCost-oldCost;this.lastBoundary=0;
@@ -127,19 +130,21 @@ class Run{
   const row={time:this.t,N:n,k,gcd:d,cost:J,nearestCost:this.method==='voronoi'?J:cost(voronoiAssignment(this.domain,this.agents,k).moments,points,k),loadError:Lab.relError(loads,k/n),massError:this.method==='sector'?Lab.relError(mass,1/n):null,blindError:this.method==='sector'?Lab.relError(blind,1/n):null,minAtom:this.method==='sector'?Math.min(...mass):null,inputRms:this.lastInput,inputPeak:this.lastPeak,boundaryRms:this.lastBoundary,effort:this.effort,pathLength:this.pathLength,clearance:Math.min(margin,pair),sweptClearance:Number.isFinite(this.minimumSweptMargin)?this.minimumSweptMargin:Math.min(margin,pair),centroidResidual,visibleKFraction:visible,emptyLoads:loads.filter(x=>x<1e-14).length,cells:a.cells,packetHops:this.network.total.packetHops,bytes:this.network.total.totalByteHops,rounds:this.network.total.rounds,stepScale:this.lastScale,motionCostDelta:this.lastMotionDelta,boundaryCostDelta:this.lastBoundaryDelta};
   row.carrierEdges=this.network.edgeCount??0;row.carrierRevision=this.network.revisions;this.current=a;this.history.push(row);return row;
  }
- export(){return {method:this.method,status:this.status,reason:this.reason||null,history:this.history,events:this.events,agents:this.agents,paths:Array.from(this.paths,([id,points])=>({id,points})),x:this.method==='sector'?this.x:null,finalLoads:this.current.moments.map(v=>v[0]),finalCentroids:this.current.moments.map(v=>v[0]>1e-14?[v[1]/v[0],v[2]/v[0]]:null),packetTrace:this.network.trace};}
+ export(){return {method:this.method,status:this.status,reason:this.reason||null,history:this.history,events:this.events,agents:this.agents,paths:Array.from(this.paths,([id,points])=>({id,points})),inputs:this.inputs,x:this.method==='sector'?this.x:null,finalLoads:this.current.moments.map(v=>v[0]),finalCentroids:this.current.moments.map(v=>v[0]>1e-14?[v[1]/v[0],v[2]/v[0]]:null),packetTrace:this.network.trace};}
 }
 class Comparison{
  constructor(options={}){
-  this.cfg=Object.assign({N:18,k:3,obstacles:presets.three,density:'hotspots',angularBins:240,radialBins:18,seed:2718,placement:'ring',initialMass:'unequal',phaseOffset:0,boundary:'moving',policy:'complement',dt:.1,boundaryGain:1,gain:1,speed:.45,alpha:3,robotRadius:.012,clearance:.004,duration:40,faultTime:null,failedId:4,carrier:'ring',radioRange:.9,lineOfSight:true,roundBudget:1000000,sensingRange:2.1,switchPeriod:3},copy(options));
+  this.cfg=Object.assign({N:18,k:3,obstacles:presets.three,density:'hotspots',angularBins:240,radialBins:18,seed:2718,placement:'ring',initialMass:'unequal',harmonicIndex:1,harmonicRms:.25,phaseOffset:0,boundary:'moving',policy:'complement',dt:.1,boundaryGain:1,gain:1,speed:.45,alpha:3,robotRadius:.012,clearance:.004,duration:40,faultTime:null,failedId:4,carrier:'ring',radioRange:.9,lineOfSight:true,roundBudget:1000000,sensingRange:2.1,switchPeriod:3},copy(options));
   const c=this.cfg;check(Number.isInteger(c.N)&&c.N>=3&&c.N<=80&&Number.isInteger(c.k)&&c.k>=1&&c.k<=c.N,'Require integer 3 <= N <= 80 and 1 <= k <= N.');
   check(Array.isArray(c.obstacles)&&c.obstacles.length<=20,'Use at most 20 circular obstacles.');
   c.obstacles.forEach(o=>check(o&&['x','y','r'].every(h=>Number.isFinite(o[h]))&&o.r>0&&Math.hypot(o.x,o.y)+o.r<=.90,'Each obstacle needs finite x, y, r > 0 and must lie inside radius 0.90.'));
   for(const key of ['dt','boundaryGain','gain','speed','alpha','robotRadius','clearance','duration','radioRange','roundBudget','sensingRange','switchPeriod'])check(Number.isFinite(c[key])&&c[key]>0,'Invalid positive parameter: '+key);
   check(c.dt<=.2&&c.dt*c.boundaryGain<.5,'Require dt <= 0.2 and dt * boundaryGain < 0.5.');check(c.robotRadius<=.06&&c.clearance<=.03,'Robot radius / clearance too large.');
   check(Number.isInteger(c.angularBins)&&c.angularBins>=60&&c.angularBins<=1440&&Number.isInteger(c.radialBins)&&c.radialBins>=8&&c.radialBins<=80,'Invalid quadrature resolution.');
-  for(const [key,values]of Object.entries({density:['uniform','hotspots'],placement:['ring','random'],initialMass:['equal','unequal'],boundary:['moving','fixed'],policy:['single','complement','switch'],carrier:['ring','range']}))check(values.includes(c[key]),'Unknown '+key);
+  for(const [key,values]of Object.entries({density:['uniform','hotspots'],placement:['ring','random'],initialMass:['equal','unequal','harmonic'],boundary:['moving','fixed'],policy:['single','complement','switch'],carrier:['ring','range']}))check(values.includes(c[key]),'Unknown '+key);
+  check(Number.isInteger(c.harmonicIndex)&&c.harmonicIndex>=1&&c.harmonicIndex<c.N&&Number.isFinite(c.harmonicRms)&&c.harmonicRms>0&&c.harmonicRms<.5,'Invalid harmonic index or RMS amplitude.');
   check(Number.isInteger(c.seed)&&c.seed>=0&&c.seed<=4294967295,'Seed must be a 32-bit unsigned integer.');
+  check(c.positionSeed==null||(Number.isInteger(c.positionSeed)&&c.positionSeed>=0&&c.positionSeed<=4294967295),'Position seed must be a 32-bit unsigned integer.');
   check(Number.isFinite(c.phaseOffset)&&c.phaseOffset>=0&&c.phaseOffset<1,'Initial phase must be in [0,1) mass turns.');
   check(c.faultTime===null||(Number.isFinite(c.faultTime)&&c.faultTime>=0&&c.N>c.k&&Number.isInteger(c.failedId)&&c.failedId>=1&&c.failedId<=c.N),'Invalid announced removal. It must leave N >= k.');
   this.domain=new Domain(c);const agents=initialAgents(c,this.domain);this.initial=copy(agents);this.sector=new Run('sector',c,this.domain,agents);this.voronoi=new Run('voronoi',c,this.domain,agents);
