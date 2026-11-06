@@ -1,0 +1,22 @@
+{
+  "schema": "pal-tiago-model-provenance-v1",
+  "sourceRepository": "https://github.com/pal-robotics/pal_mjlab",
+  "sourceCommit": "952abb83a590d0e771cfd8e570517ba054182196",
+  "sourcePath": "src/pal_mjlab/robots/pal_tiago_pro/xmls/tiago_pro.xml",
+  "headSourceCommit": "a10e252dc55968c6ac91d2a84eb4626a4811bc78",
+  "sha256": {
+    "original.xml": "25ab9d9c387a8897aaf395f51438838f02bec82e4d375cfa78333d3ddd8d118e",
+    "planar20.xml": "3bae081f342dff7574b8e3bd0bc91260c01e3e5a515fe056e2267cda5ed08559"
+  },
+  "inertialEntriesPreserved": 34,
+  "coordinates": 20,
+  "removedMeshEntries": 80,
+  "modifications": [
+    "Remove mesh visuals, retain all published explicit inertial entries and primitive collision geometry.",
+    "Add planar x/y/yaw support: wheel-ground/roller dynamics and chassis roll/pitch are not modeled.",
+    "Restore torso slide and head pan/tilt joints; fixed gripper fingers remain fixed.",
+    "Add bounded ideal generalized-force actuators, damping and armature as declared experimental parameters.",
+    "Base inputs are chassis forces/yaw moment, not measured factory wheel torque commands."
+  ],
+  "calibration": "Published vendor simulation model, not identified hardware dynamics."
+}

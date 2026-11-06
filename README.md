@@ -18,7 +18,14 @@ offline ROS 2 and the permanent rightmost Theory center have separate entrances.
 Random feasible initial positions and independent position/mass seeds are the
 homepage default. The ROS 2 bench does not connect to or command real hardware.
 
-Core tests and the static build have no external package dependency:
+Core algebra tests have no external package dependency:
+
+The core algebra/SI tests still have no package dependency. The new articulated
+TIAGo Pro lab uses official MuJoCo 3.8.1 WASM. Run `node scripts/install-physics.mjs`
+before the whole-body tests or the build; the installer verifies a pinned archive.
+The simulator runs a PAL-derived 20-DoF planar-supported model, not identified
+factory dynamics or a wheel/roller model. Hardware ROS 2 remains disconnected.
+Read [the model and actual allocation meaning](docs/TIAGo_Matched_Experiment.md).
 
 ```text
 node tests/run-tests.cjs
@@ -30,6 +37,9 @@ node tests/structure-viewer-harness.cjs
 node tests/lab-tests.cjs
 node tests/lab-viewer-harness.cjs
 node tests/ros2-viewer-harness.cjs
+node tests/tiago-tests.mjs
+node tests/tiago-viewer-harness.mjs
+node tests/validate-tiago-benchmarks.cjs
 node tests/validate-benchmarks.cjs
 node tests/validate-structure-benchmarks.cjs
 node scripts/build.mjs

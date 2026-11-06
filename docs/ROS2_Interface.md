@@ -2,7 +2,7 @@
 
 ## Implemented now
 
-The ROS 2 page validates and replays neutral JSON, downloads a synthetic example and produces an offline mission adapter draft. It never opens a ROS bridge, publishes commands or claims a connected robot. The platform selector is an integration target. The synthetic three-joint rig is not a TIAGo or G1 simulation.
+The separate [TIAGo Pro dynamics lab](TIAGo_Comparison.html) now runs actual articulated MuJoCo physics; its model is planar-supported and uses declared ideal actuators. ROS 2 hardware remains disconnected. The ROS 2 recording page validates and replays neutral JSON, downloads a synthetic example and produces an offline mission adapter draft. It never opens a ROS bridge, publishes commands or claims a connected robot. The platform selector is an integration target. The synthetic three-joint rig is not a TIAGo or G1 simulation.
 
 ## Telemetry v1
 

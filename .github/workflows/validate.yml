@@ -10,6 +10,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+      - run: node scripts/install-physics.mjs
       - run: npm test
       - run: node tests/viewer-harness.cjs
       - run: node tests/comparison-viewer-harness.cjs
@@ -17,6 +18,8 @@ jobs:
       - run: node tests/structure-viewer-harness.cjs
       - run: node tests/lab-viewer-harness.cjs
       - run: node tests/ros2-viewer-harness.cjs
+      - run: node tests/tiago-viewer-harness.mjs
+      - run: node tests/validate-tiago-benchmarks.cjs
       - run: node tests/validate-structure-benchmarks.cjs
       - run: npm run build
       - run: node tests/validate-build.cjs

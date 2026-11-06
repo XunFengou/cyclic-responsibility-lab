@@ -2,6 +2,7 @@
 /research/
 /test-results/
 /node_modules/
+/.physics-runtime/
 /preview-tmp/
 /.sites-runtime/
 /.env

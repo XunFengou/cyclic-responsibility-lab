@@ -81,11 +81,11 @@ The structural lab contains a balanced fractional-flow reference, cyclic phase c
 
 ## ROS 2 and enterprise robots
 
-The ROS 2 page is an offline integration bench, with no connected robot and no command publisher. Select TIAGo Pro, TIAGo++ or G1 and download a mission adapter draft. It deliberately requires the exact model revision, vendor interface and topic mapping. Selecting a platform does not instantiate its full dynamics.
+The ROS 2 recording page is an offline integration bench, with no connected robot and no command publisher. Its prominent TIAGo Pro link opens a separate, now implemented whole-body MuJoCo simulator. Select TIAGo Pro, TIAGo++ or G1 and download a mission adapter draft. It deliberately requires the exact model revision, vendor interface and topic mapping. Selecting a platform does not instantiate its full dynamics.
 
 Use the view-angle slider to see why two responsible robots can still give singular bearing information. Then load the explicitly synthetic contract example or import telemetry JSON. Choose physical ID, joint and recorded frame; efforts retain N or N m units. Invalid files are rejected while the previous valid replay remains. The contract limits files to 5 MB and 1000 frames. Declared hardware provenance is not independently authenticated by the viewer.
 
-Read [enterprise robot dynamics](robot-theory.html) and [ROS 2 contract](ros2-contract.html). Full-body simulation, contact-aware control and hardware tests remain future work. This update does not claim they have run.
+Read [enterprise robot dynamics](robot-theory.html) and [ROS 2 contract](ros2-contract.html). The separate TIAGo Pro lab now runs a declared planar-supported whole-body model and acceleration guard. Vendor hardware connection, wheel/roller simulation and hardware tests remain future work.
 
 ## Reproduce from source
 
@@ -124,3 +124,15 @@ Theory is intentionally the last navigation item. Its catalog links operators/pr
 - Inputs approach zero but centroid excess remains: obstacles or other robots can constrain motion. Clearance and residual must be reported together.
 - H rises: compare boundary and motion contributions in the specialist pages. Only fixed-partition motion descent has the stated monotonicity guarantee.
 - Cannot find a page: use the seven-item top navigation. The older filenames remain available for existing links, but the homepage is now the core experiment.
+
+## TIAGo Pro whole-body simulation
+
+Open the TIAGo Pro lab from Dynamics or ROS 2. Wait for the pinned 9 MB MuJoCo runtime and model to load; initialization failure is shown explicitly, with no point-plant fallback. Choose a preset, N=3..8, service k, map, seed and duration. Apply / reset starts an identical paired initialization. Run toggles pause; One coverage epoch advances 0.1 s through twenty actual EL integration steps. Display speed changes epochs per screen frame only.
+
+The map shows normalized coordinates (10 m per unit); performance uses m, s, N and N m. Select a physical ID to inspect its actual articulated link transforms, left/right shoulder torque and lift force. Scrub recorded states with the timeline; Resume computes from the latest state. Removal snapshots retain survivors and have no new native-input samples. Export JSON for full joint states and CSV for common coverage metrics.
+
+Planned load curves coincide because the same virtual-boundary law is used. Compare physical cost, actual velocity, native forces, tracking residual and execution fractions separately. K=1 cannot complete the stated simultaneous two-robot view task. K=2 only allocates enough distinct robots; view geometry and dynamics still limit actual completion. The fixed-ray and payload presets isolate tracking and load effects. The upper-body selector can hold posture or run representative inspection scans.
+
+The model is the PAL-published articulated inertia tree with planar support and declared ideal actuators; it is not factory-identified dynamics or a wheel-roller simulator. A 0.04 m additional acceleration-guard buffer is explicit. Contacts are compliant and may penetrate slightly; report that value and saturation instead of assuming collision-free convergence. Read [the exact model, controller and allocation interpretation](tiago-theory.html).
+
+New setup commands are node scripts/install-physics.mjs before physics tests/build, then node tests/tiago-tests.mjs, node tests/tiago-viewer-harness.mjs and node tests/validate-tiago-benchmarks.cjs. Run node scripts/run-tiago-benchmarks.mjs to regenerate the six recorded cases and the local full metrics archive. Hardware ROS 2 remains offline; the new feature is an implemented articulated physics simulator.
