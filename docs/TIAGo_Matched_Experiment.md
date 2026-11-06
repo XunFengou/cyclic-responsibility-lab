@@ -1,5 +1,7 @@
 # TIAGo Pro whole-body dynamics and actual allocation
 
+The original baseline below and its12.44% planar two-view result are preserved. The new [execution-aware allocation lab](Execution_Allocation.html) adds capability bids, routed leases and actual evidence; the [dual-arm transport lab](Bimanual_Transport.html) adds a free physical object. Their metrics and assumptions are defined separately in [execution theory](execution-theory.html) and [transport theory](bimanual-theory.html).
+
 ## What is implemented
 
 The TIAGo comparison page runs the official MuJoCo 3.8.1 WebAssembly engine with a pinned PAL Robotics articulated model. It integrates forces into velocities and configurations. It does not replace a point icon with a robot drawing while retaining single-integrator motion. Every active physical robot contributes 20 independent configuration and velocity coordinates, 20 bounded ideal actuators, a complete articulated inertia tree and primitive contact geometry. Six robots therefore have 120 dynamic coordinates.

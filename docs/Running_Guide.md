@@ -136,3 +136,46 @@ Planned load curves coincide because the same virtual-boundary law is used. Comp
 The model is the PAL-published articulated inertia tree with planar support and declared ideal actuators; it is not factory-identified dynamics or a wheel-roller simulator. A 0.04 m additional acceleration-guard buffer is explicit. Contacts are compliant and may penetrate slightly; report that value and saturation instead of assuming collision-free convergence. Read [the exact model, controller and allocation interpretation](tiago-theory.html).
 
 New setup commands are node scripts/install-physics.mjs before physics tests/build, then node tests/tiago-tests.mjs, node tests/tiago-viewer-harness.mjs and node tests/validate-tiago-benchmarks.cjs. Run node scripts/run-tiago-benchmarks.mjs to regenerate the six recorded cases and the local full metrics archive. Hardware ROS 2 remains offline; the new feature is an implemented articulated physics simulator.
+
+## Execution-aware allocation
+
+Open Execution_Allocation.html from Overview or Comparisons. It opens a recorded SAME-TRAJECTORY REPLAY first. Left is capacity-admitted cyclic ownership; choose repair, nearest-k or feasible geometric ownership on the right. Every method uses the same physical trajectory. Scrub the timeline and select a physical ID to connect its path color, region ownership and optical heading. Read the coverage curve against the pose ceiling: allocation cannot exceed visibility supported by the current robot poses. Export JSON or metrics CSV to retain this experiment separately from finite jobs.
+
+Choose Closed-loop task mission to see the four actual EL fleets. These are recorded 45 s missions initially. Run recomputes them with MuJoCo in your browser. Set N=3..8, k=1..3, seed, duration, carrier and budget, then Apply / reset. One epoch advances0.1 s; display speed only changes epochs drawn per animation frame. A changed setting never silently alters the currently displayed recording. Rapidly switching tabs discards stale recording responses. All four physics fleets can be computationally expensive; use One epoch and a short duration while exploring.
+
+For the default case keep N6,k2,ten jobs,250000 byte-hops per one-second allocation epoch, heterogeneity and the resource reservation enabled. Colored job pies show committed robot owners, green crosses completed jobs and gray pending jobs. The outer sector bands show the CYCLIC REFERENCE rather than claiming every repaired task still lies in that sector. ID2 is booked during12..27 s. Enabling announced removal removes ID3 at20 s, preserves survivor state and reindexes roles. Use at least21 s for this case. Try N5,k2 (gcd1), N6,k3 (gcd3), or N7,k2 followed by removal to N6 (gcd1->2). N/k changes also change capacity and coalition size; physical completion differences cannot be attributed to gcd alone.
+
+The confirmed completion curve requires six consecutive delivered0.1 s reports from all k owners, valid range/FOV/3D LOS and at least one noncollinear observer pair, followed by routed completion announcements. Current service is measured only on unfinished jobs and can be zero after success. Reference workload error follows R_k; admitted weighted-job RMS measures actual allocation imbalance and is n/a when no active work remains. Full-map H uses the same nearest-k distance cost for all fleets. Chassis speed and arm torques use m/s and N m; native actuator work is not electrical energy. Byte-hop curves include actual topology, snapshots, bids, capacity tokens, prepare/ACK/commit, observations and notifications.
+
+To inspect limits, reduce budget to18000, select the range carrier and make its range very small, or choose k1 for this inherently two-view job. A missing commit retains a prior valid lease or leads to inertial braking after expiry. Missing evidence resets dwell, rather than certifying a task. These runs can remain incomplete. The event log and JSON expose the reason. The byte budget is for each one-second allocation window including its observation reports; it is not a measured Wi-Fi throughput guarantee. Range is displayed in meters.
+
+The 12.44% preserved metric, same-state repaired25.13%, and finite-job cumulative completion have different meanings. Read execution-theory.html before making a performance claim. The execution-aware geometric baseline is deliberately strong; cyclic repair is not guaranteed to beat it. All methods share model, scene, initial sites, targets, capacity and detector; centroid baselines and viewing-pose repair differ in their control stack. The replay isolates allocation changes alone.
+
+For N<10, persistent physical IDs have distinct colors in paths, robot markers and basic regions. Low-order overlap is shown with colored bands instead of pretending each point has only one owner. Labels survive role reindexing. This applies to the core dashboard, small-order comparison views and new allocation maps; larger fleets retain uncluttered aggregate colors.
+
+## Dual-arm transport
+
+Open Bimanual_Transport.html from Dynamics or ROS2. Wait for actual MuJoCo and setup-only arm IK. Keep2 kg,1 m,both hands and press Run transport. Follow lift, translate, lower, support verification, release and settle. The robot skeleton and free tray are read from actual physical state. Initial fixture preparation is not autonomous grasp acquisition.
+
+Inspect actual hand forces near3 s: each hand carries about9.81 N for this2 kg tray. The force curve comes from the solver; the m*g/2 line is just a reference. Placement error, actual support contact, speed and tilt gate release after13 s. A successful15 s result leaves the released object on the delivery fixture. Native shoulder torque, grasp-anchor error and contact penetration remain visible. Scrub the timeline, export full physics JSON or CSV, and reset before changing payload or distance.
+
+Try3 kg and1.5 m, then left-hand-only and no-grasp counterchecks. Failure remains visible; the tray is not snapped to its goal. No-grasp includes a deep transient contact violation and is intentionally rejected. Failure of this one-arm fixture controller is not a general impossibility result. Both arms belong to ONE robot. Their coupled manipulation is not k2 independent-robot coverage.
+
+The fleet reservation and the tray experiment are separate: the allocator books ID2 for15 s; it does not simulate that tray inside the fleet map. Read bimanual-theory.html for ideal grasps, planar support, controller and model limitations. Hardware remains disconnected. There is no finger slip, wheel roller, tipping or pickup perception model.
+
+## Reproduce the execution experiments
+
+From the site directory use the following commands. All recorded comparison data are retained compressed in assets/result; build expands them for static hosting. Full packet/state research outputs stay in the ignored research/execution directory.
+
+```text
+node scripts/install-physics.mjs
+npm test
+npm run test:viewer
+node scripts/run-execution-benchmarks.mjs
+node tests/validate-execution-benchmarks.cjs
+npm run build
+node tests/validate-build.cjs
+npm run preview
+```
+
+The experiment script runs36 actual articulated fleet trials,301 same-state visibility audits and5 physical transport cases. MATLAB scripts/plot_execution_allocation.m creates static scientific figures from the recorded compact data. Numerical validation, synthetic DOM/events, static build checks and anonymous HTTP are distinct. Prior native browser safety restrictions remain; this update does not claim verified browser layout or hardware operation.

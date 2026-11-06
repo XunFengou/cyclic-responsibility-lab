@@ -63,6 +63,31 @@ and renders the English Markdown documents. Do not treat generated `dist/` as
 the canonical source. The website
 interface, model explanations, and paper figure labels remain in English.
 
+## Execution-aware allocation and dual-arm objects
+
+Open `Execution_Allocation.html` for the same-state 12.44% diagnosis and matched
+finite-job missions. Camera FOV, 3D cylinder occlusion, head/torso limits,
+capacity, private routed bids, versioned leases and fresh observation evidence
+constrain actual execution. The cyclic reference keeps its exact N,k,gcd
+classification; the repaired incidence generally loses circulant symmetry.
+Read [the definitions and protocol safety proof](docs/Execution_Aware_Allocation.md).
+
+Open `Bimanual_Transport.html` for actual free-tray transport by one robot with
+two fixed hand grasps. It includes native forces, contact-gated release and
+retained failed physical counterchecks. The initial pre-grasp fixture is not
+autonomous grasp acquisition. Read [the physical model](docs/Bimanual_Transport.md).
+The fleet resource reservation and this tray experiment are separate.
+
+Use `node tests/execution-tests.mjs`, `node tests/bimanual-tests.mjs`,
+`node tests/execution-viewer-harness.mjs` and `node tests/bimanual-viewer-harness.mjs`.
+Regenerate 36 fleet trials, 301 visibility audits and 5 transport trials with
+`node scripts/run-execution-benchmarks.mjs`, validate with
+`node tests/validate-execution-benchmarks.cjs`, prepare figure data with
+`node scripts/prepare-execution-figures.cjs`, then run MATLAB
+`plot_execution_allocation`. Recorded source JSON is gzip-compressed; build
+expands it for static hosting. Low-N paths and overlapping ownership use
+persistent physical-ID colors.
+
 ## Scientific scope
 
 The new `src/Structure_Comparison.html` separates arithmetic mode scans, nested

@@ -42,6 +42,18 @@
     "description": "20-DoF PAL-derived plant, matched SI comparison, constrained force control, native inputs and actual task realization. Planar support and model simplifications are explicit."
   },
   {
+    "title": "Execution-aware distributed K-th allocation",
+    "href": "execution-theory.html",
+    "status": "Implemented routed capability repair",
+    "description": "Private viewing-pose bids, capacity tokens, leases and fresh execution evidence. Same-state replay and four-way matched EL missions; exact cyclic backbone vs noncirculant feasible incidence."
+  },
+  {
+    "title": "Dual-arm tray transport",
+    "href": "bimanual-theory.html",
+    "status": "Implemented free-object physics",
+    "description": "One robot, two hand constraints, an actual free tray, native load forces, support-gated release and retained failed counterchecks. Setup-only pre-grasp fixture."
+  },
+  {
     "title": "ROS 2 telemetry and adapter contract",
     "href": "ros2-contract.html",
     "status": "Implemented offline validation and replay",

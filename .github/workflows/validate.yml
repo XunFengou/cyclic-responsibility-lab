@@ -19,6 +19,9 @@ jobs:
       - run: node tests/lab-viewer-harness.cjs
       - run: node tests/ros2-viewer-harness.cjs
       - run: node tests/tiago-viewer-harness.mjs
+      - run: node tests/execution-viewer-harness.mjs
+      - run: node tests/bimanual-viewer-harness.mjs
+      - run: node tests/validate-execution-benchmarks.cjs
       - run: node tests/validate-tiago-benchmarks.cjs
       - run: node tests/validate-structure-benchmarks.cjs
       - run: npm run build
