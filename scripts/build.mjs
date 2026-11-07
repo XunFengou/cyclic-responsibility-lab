@@ -36,6 +36,7 @@ const documents=[
  ['ros2-contract.html','ROS 2 Telemetry and Adapter Contract','ROS2_Interface.md'],
  ['tiago-theory.html','TIAGo Pro Whole-Body Coverage Experiment','TIAGo_Matched_Experiment.md'],
  ['autonomous-theory.html','Autonomous Carrier Acquisition and Supported Handover','Autonomous_Acquisition.md'],
+ ['redistribution-theory.html','Contact-Only Transport for Coverage with Movable Demand','Load_Redistribution.md'],
  ['integrated-theory.html','Shared-World Inspect Carry Confirm','Integrated_Workflow.md'],
  ['execution-theory.html','Execution-Aware Distributed K-th Allocation','Execution_Aware_Allocation.md'],
  ['bimanual-theory.html','Dual-Arm Transport with a Free Object','Bimanual_Transport.md'],

@@ -1,0 +1,30 @@
+{
+  "status": "passed",
+  "input": "D:\\Codex\\2026-10-26\\referenced-chatgpt-conversation-this-is-an\\site\\research\\redistribution\\normal-g.json",
+  "output": "D:\\Codex\\2026-10-26\\referenced-chatgpt-conversation-this-is-an\\work\\redistribution-video\\redistribution-normal.mp4",
+  "inputSha256": "40d94994ee1d16c30abade021bbdd844bf412fba7f8609b1454b74cb2147bee3",
+  "outputSha256": "f1cac94a591faa0f4dfecddeae1a63ca41a3259be5bfcde7b7eba23b3456cc09",
+  "bytes": 796858,
+  "width": 1280,
+  "height": 720,
+  "fps": 10,
+  "frames": 883,
+  "mujoco": "3.8.1",
+  "sourceFirstTime": 0.0,
+  "sourceLastTime": 88.19999999999926,
+  "renderedLastTime": 88.19999999999926,
+  "posterSourceTime": 56.000000000000526,
+  "truncated": false,
+  "sceneSha256": [
+    "0717b1bb82c9d708d700f6f6731344a7b15a21246a7e0a3d5ad0090575343e86"
+  ],
+  "statePolicy": "Forward kinematics of logged qpos, zero-order hold, no dynamics rollout",
+  "telemetryPolicy": "Recorded data only; absent measurements remain unavailable",
+  "validation": {
+    "decodedFrames": 883,
+    "durationSeconds": 88.3,
+    "decodeStatus": "passed"
+  },
+  "browserVerification": false,
+  "hardwareVerification": false
+}

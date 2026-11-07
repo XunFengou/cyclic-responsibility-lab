@@ -1,0 +1,32 @@
+{
+  "status": "passed",
+  "input": "D:\\Codex\\2026-10-26\\referenced-chatgpt-conversation-this-is-an\\site\\research\\redistribution\\handover-a.json",
+  "output": "D:\\Codex\\2026-10-26\\referenced-chatgpt-conversation-this-is-an\\work\\redistribution-video\\redistribution-handover.mp4",
+  "inputSha256": "dbd3c140ad350d9c5adea1a084b9f7cb829a7435772e06a2dc0290c244e0a675",
+  "outputSha256": "5e21fd3e38a0d32c2ead8ed60f91ccc32eab87ede69c074a8f51aa6e3800082e",
+  "bytes": 1353630,
+  "width": 1280,
+  "height": 720,
+  "fps": 10,
+  "frames": 1620,
+  "mujoco": "3.8.1",
+  "sourceFirstTime": 0.0,
+  "sourceLastTime": 161.8999999999951,
+  "renderedLastTime": 161.8999999999951,
+  "posterSourceTime": 143.8999999999961,
+  "truncated": false,
+  "sceneSha256": [
+    "0717b1bb82c9d708d700f6f6731344a7b15a21246a7e0a3d5ad0090575343e86"
+  ],
+  "statePolicy": "Forward kinematics of logged qpos, zero-order hold, no dynamics rollout",
+  "telemetryPolicy": "Recorded data only; absent measurements remain unavailable",
+  "validation": {
+    "decodedFrames": 1620,
+    "durationSeconds": 162.0,
+    "decodeStatus": "passed"
+  },
+  "browserVerification": false,
+  "hardwareVerification": false,
+  "posterPolicy": "Decoded MP4 frame showing final delivery on destination support",
+  "posterSha256": "06d70e4365aa2e271025dc4b82c0b54027157a044b96196bd6cc53389b9952e5"
+}

@@ -1,5 +1,11 @@
 [
   {
+    "title": "Contact-only transport for movable coverage demand",
+    "href": "redistribution-theory.html",
+    "status": "Physical redistribution and finite-pad handover",
+    "description": "Demand conservation, frozen-geometry counterfactuals, contact force and slip, and the algebra of changing cyclic loads."
+  },
+  {
     "title": "Autonomous acquisition and supported fault handover",
     "href": "autonomous-theory.html",
     "status": "Contact-certified experimental tool / same physical fleet",

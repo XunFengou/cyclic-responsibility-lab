@@ -249,3 +249,12 @@ The autonomous benchmark includes twelve paired scenarios (48 trials), including
 The 1 kg expanded-carrier recording deliberately retains an acquisition failure: robot4 passes the static reach/payload screen, but moves the object during arm approach. A sampled displacement guard stops and quarantines it without a grasp certificate. This illustrates why a feasible IK bid alone is not a dynamic manipulation guarantee.
 
 Check contact penetration and joint-limit excess in the resource cards. The light-payload case is rejected as physically feasible: it retains a soft-limit violation and an unsupported disturbance despite acquisition being stopped. Passing the protocol/recording audit does not make every trial physically safe. Only the explicitly successful task records receive a success score; failed and physically rejected counterexamples remain visible.
+
+## Movable demand and friction-only transport
+
+Open [Relocating a Narrow Hotspot](Load_Redistribution.html). Choose a recording and policy, and compare **Before** with **Last state**. The physical-time slider shows the gripper forces, parcel motion, selected refuge and source load. The MP4s use the same recorded robot and parcel poses.
+
+The source combines stationary and movable demand in a narrow patch. The parcel's physical position moves its contribution to the field. The frozen-angle and fixed-robot comparisons quantify the load change independently of fleet motion. The final delivery credit appears after measured support and release.
+
+To change N, k, mass, friction or fault mode, use **Run a custom trial**. The articulated simulation takes longer than replay. See [the model and measurements](redistribution-theory.html) for the contact, reachability and degraded-chassis assumptions.
+

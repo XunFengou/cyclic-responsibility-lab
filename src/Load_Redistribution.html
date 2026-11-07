@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Relocating a Narrow Hotspot | K-th Coverage Lab</title>
+  <meta name="description" content="Contact-only bimanual transport, finite fault refuges and a measured redistribution of demand in the K-th Coverage Lab.">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="site-shell.css">
+  <link rel="stylesheet" href="redistribution.css">
+</head>
+<body><main><nav></nav>
+  <header class="page-hero rd-hero">
+    <p class="eyebrow">COVERAGE WITH MOVABLE DEMAND</p>
+    <h1>Move the load.<br>Open the narrow sectors.</h1>
+    <p>A narrow source patch contains stationary demand and one graspable parcel. The robots move the parcel to a better distribution of demand, using measured friction contacts to hold it and separated supports to place it.</p>
+    <div class="lab-toc"><a href="#rdReplay">Replay and compare</a><a href="#rdMovies">Download MP4s</a><a href="redistribution-theory.html">Model and metrics</a><a href="Autonomous_Transport.html">Earlier ideal-grasp baseline</a></div>
+  </header>
+  <section class="interface-panel" id="rdReplay">
+    <h2>Matched experimental recordings</h2>
+    <div class="control-row">
+      <label>Scenario<select id="rdScenario"></select></label>
+      <label>Assignment policy<select id="rdPolicy"><option value="repair">Cyclic repair</option><option value="cyclic">Fixed cyclic</option><option value="voronoi">Nearest-k Voronoi</option><option value="geometricRepair">Geometric repair</option></select></label>
+      <button id="rdPlay" class="primary">Play replay</button><button id="rdBefore">Before</button><button id="rdAfter">Last state</button>
+    </div>
+    <div class="rd-scrub"><label for="rdTime">Physical time</label><input id="rdTime" type="range" min="0" max="0" value="0" step="0.1"><output id="rdClock">0.0 s</output></div>
+    <p id="rdStatus" class="trial-status" role="status" aria-live="polite">Loading experimental records…</p>
+    <div class="metric-cards" id="rdMetrics"></div>
+  </section>
+  <div class="rd-views">
+    <section class="plot"><h2>Coverage map</h2><canvas id="rdMap" role="img" aria-label="Current angular sectors, fixed source patch, robots and measured parcel"></canvas><p>Colored rays are the evolving cyclic mass-coordinate reference. The red wedge marks the stationary source. The gold marker follows the integrated parcel.</p></section>
+    <section class="plot"><h2>Manipulation corridor</h2><canvas id="rdLocal" role="img" aria-label="Separate supports, actual parcel and selected carrier"></canvas><p>Dark outlines mark the chosen support. White gaps separate the physical pads. The orange trail shows where the parcel actually moved.</p><p id="rdSupport"></p><ol class="rd-events" id="rdEvents"></ol></section>
+  </div>
+  <div class="dashboard-charts">
+    <section class="plot"><h2>Demand retained at the source</h2><canvas id="rdSource" role="img" aria-label="Source concentration and certified relocated demand over time"></canvas><p>Concentrated demand is a share of total workload. Delivery credit appears after measured support, open jaws and stable dwell.</p></section>
+    <section class="plot"><h2>Load imbalance on frozen geometry</h2><canvas id="rdBalance" role="img" aria-label="Before and after fixed-geometry load imbalance"></canvas><p>Relative RMS across roles for fixed angles and the same initial robot poses. The dashed line holds the parcel at its source.</p></section>
+    <section class="plot"><h2>Smallest sector angle</h2><canvas id="rdAngle" role="img" aria-label="Minimum cyclic sector width in degrees"></canvas><p>Current cyclic boundaries and the best phase sampled among 72 equal-mass partitions. A larger angle means less pinching.</p></section>
+    <section class="plot"><h2>Grasp force and tangential slip</h2><canvas id="rdForce" role="img" aria-label="Measured normal force and commanded normal force"></canvas><canvas id="rdSlip" role="img" aria-label="Measured tangential slip speed at the contacts"></canvas><p>Measured forces come from pad–handle contacts. Slip is the tangential relative velocity at those contacts.</p></section>
+  </div>
+  <section class="interface-panel"><h2>Policy comparison</h2><p>Each scenario starts from the same physical state, demand field, finite support set and communication budget. Every method can select a destination, grasp, relocate, release and seek confirmation.</p>
+    <div class="table-scroll"><table class="status-table"><thead><tr><th>Policy</th><th>Carriers</th><th>Recovery pad</th><th>Delivery (s)</th><th>Confirmation (s)</th><th>Final fixed-angle RMS</th><th>Outcome</th></tr></thead><tbody id="rdResults"></tbody></table></div>
+    <p id="rdAlgebra"></p><a href="result/redistribution-recordings.json" download>Download comparison records</a>
+  </section>
+  <section class="interface-panel"><h2>Run a custom trial</h2><p>Loads the same articulated MuJoCo model in the browser. Running a full horizon takes longer than replay.</p>
+    <div class="control-row">
+      <label>Robots N<input id="rdN" type="number" min="3" max="8" value="6"></label><label>Views k<input id="rdK" type="number" min="1" max="3" value="2"></label>
+      <label>Parcel mass (kg)<input id="rdMass" type="number" min="1" max="3" step="0.1" value="1"></label><label>Pad friction μ<input id="rdMu" type="number" min="0.08" max="1.6" step="0.02" value="0.9"></label>
+      <label>Fault<select id="rdFault"><option value="none">None</option><option value="recoverable">Degraded chassis</option><option value="structural">Jaw-force loss</option><option value="retire">Announced role retirement</option></select></label>
+      <button id="rdRun">Run selected policy</button><button id="rdStop" disabled>Stop trial</button>
+    </div><p id="rdRunStatus" aria-live="polite"></p>
+  </section>
+  <section id="rdMovies" class="interface-panel"><h2>MP4s from recorded physics</h2><p>The renderer uses measured joint positions, object pose and contact telemetry at the recorded times.</p><div class="map-grid">
+    <figure><video controls preload="metadata" width="640" poster="result/redistribution-normal-poster.png" src="result/redistribution-normal.mp4"></video><figcaption><a href="result/redistribution-normal.mp4" download>Download light parcel redistribution</a> · <a href="result/redistribution-normal.video.json">Provenance</a></figcaption></figure>
+    <figure><video controls preload="metadata" width="640" poster="result/redistribution-handover-poster.png" src="result/redistribution-handover.mp4"></video><figcaption><a href="result/redistribution-handover.mp4" download>Download finite-pad handover</a> · <a href="result/redistribution-handover.video.json">Provenance</a></figcaption></figure>
+  </div></section>
+</main><div id="labTooltip" role="tooltip" hidden></div>
+<script src="dynamics.js"></script><script src="engine.js"></script><script src="comparison.js"></script><script src="lab-model.js"></script><script src="lab-plots.js"></script><script src="tiago-core.js"></script><script src="execution-allocation.js"></script><script src="execution-plant.js"></script><script type="module" src="redistribution-viewer.mjs"></script>
+</body></html>

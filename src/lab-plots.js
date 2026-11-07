@@ -26,5 +26,5 @@ function map(id,domain,frame,trail,selected,ghost=null,onSelect=null){const {el,
 }
 function profile(id,frame){const {c,w,h}=prepare(id),L=55,R=w-15,T=20,B=h-45,n=frame.row.N,k=frame.row.k,m=frame.row.mass,l=frame.row.loads,max=Math.max(1.2,...m.map(v=>n*v),...l.map(v=>n*v/k))*1.04,X=i=>L+(R-L)*i/n,Y=v=>B-(B-T)*v/max;for(let i=0;i<n;i++){c.fillStyle=colors[0];c.fillRect(X(i)+1,Y(n*m[i]),Math.max(.5,(R-L)/n-2),B-Y(n*m[i]));}line(c,l.map((v,i)=>[X(i+.5),Y(n*v/k)]),colors[1]);c.setLineDash([4,3]);line(c,[[L,Y(1)],[R,Y(1)]],'#263e50',1);c.setLineDash([]);c.font='10px system-ui';c.fillStyle='#4e6979';for(const i of [0,Math.floor((n-1)/2),n-1])c.fillText('ID '+frame.agents[i].id,X(i+.1),B+17);c.fillText('Current cyclic role / persistent physical ID',150,h-3);c.fillText('Normalized mass / load; ideal 1',L,12);}
 function download(name,text,type='application/json'){const url=URL.createObjectURL(new Blob([text],{type})),a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
-root.LabPlots={colors,format,prepare,chart,map,profile,download};
+root.LabPlots={colors,format,prepare,line,chart,map,profile,download};
 })(typeof globalThis!=='undefined'?globalThis:this);

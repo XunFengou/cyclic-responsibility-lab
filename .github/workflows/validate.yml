@@ -28,6 +28,8 @@ jobs:
       - run: node tests/validate-structure-benchmarks.cjs
       - run: node tests/autonomous-viewer-harness.mjs
       - run: node tests/validate-autonomous-benchmarks.cjs
+      - run: node tests/validate-redistribution-recordings.cjs
+      - run: node tests/redistribution-viewer-harness.mjs
       - run: npm run build
       - run: node tests/validate-build.cjs
       - uses: actions/upload-artifact@v4
