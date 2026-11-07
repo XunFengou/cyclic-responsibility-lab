@@ -42,6 +42,12 @@
     "description": "20-DoF PAL-derived plant, matched SI comparison, constrained force control, native inputs and actual task realization. Planar support and model simplifications are explicit."
   },
   {
+    "title": "Integrated inspect, carry and confirm",
+    "href": "integrated-theory.html",
+    "status": "Implemented shared-world task loop",
+    "description": "One physical fleet/object model, typed task DAG, real resource occupation, routed stage certificates, reconstruction and fair policy-only comparisons. Exact cyclic reference vs capability hypergraph."
+  },
+  {
     "title": "Execution-aware distributed K-th allocation",
     "href": "execution-theory.html",
     "status": "Implemented routed capability repair",

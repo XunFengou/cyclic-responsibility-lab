@@ -63,6 +63,24 @@ and renders the English Markdown documents. Do not treat generated `dist/` as
 the canonical source. The website
 interface, model explanations, and paper figure labels remain in English.
 
+## Integrated inspect, carry and confirm
+
+`Integrated_Mission.html` couples all robots and one free tray in the same
+MuJoCo model and physical clock. External pre-inspection, a routed resource
+grant, actual dual-arm transport, support-gated release and fresh placement
+confirmation form a typed task DAG alongside background inspection. Carrier
+capacity changes from real workflow state and triggers reassignment.
+Observer removal preserves survivor/object states; hand loss quarantines the
+payload without invented recovery. All four policies share the same viewpoint
+executor and carrier controller. See [the precise model and conditional proofs](docs/Integrated_Workflow.md).
+
+Run `node tests/integrated-tests.mjs`, `node tests/integrated-viewer-harness.mjs`,
+`node scripts/run-integrated-benchmarks.mjs` and
+`node tests/validate-integrated-benchmarks.cjs`. The runner records40 paired
+trials. Prepare static plot data with `node scripts/prepare-integrated-figures.cjs`,
+then run MATLAB `plot_integrated_missions`. The pre-grasp fixture, known map,
+reserved workcell, ideal grasps and offline hardware scope remain explicit.
+
 ## Execution-aware allocation and dual-arm objects
 
 Open `Execution_Allocation.html` for the same-state 12.44% diagnosis and matched
@@ -76,7 +94,8 @@ Open `Bimanual_Transport.html` for actual free-tray transport by one robot with
 two fixed hand grasps. It includes native forces, contact-gated release and
 retained failed physical counterchecks. The initial pre-grasp fixture is not
 autonomous grasp acquisition. Read [the physical model](docs/Bimanual_Transport.md).
-The fleet resource reservation and this tray experiment are separate.
+The earlier allocation page's scheduled reservation and its isolated tray experiment are separate;
+Integrated_Mission.html is the new actual shared-world coupling.
 
 Use `node tests/execution-tests.mjs`, `node tests/bimanual-tests.mjs`,
 `node tests/execution-viewer-harness.mjs` and `node tests/bimanual-viewer-harness.mjs`.

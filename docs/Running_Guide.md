@@ -179,3 +179,37 @@ npm run preview
 ```
 
 The experiment script runs36 actual articulated fleet trials,301 same-state visibility audits and5 physical transport cases. MATLAB scripts/plot_execution_allocation.m creates static scientific figures from the recorded compact data. Numerical validation, synthetic DOM/events, static build checks and anonymous HTTP are distinct. Prior native browser safety restrictions remain; this update does not claim verified browser layout or hardware operation.
+
+
+## Integrated inspect carry confirm
+
+Open Integrated_Mission.html from Overview, Comparisons, Dynamics or ROS2. It loads the recorded N6/k2/seed2718 shared-world mission. All robot copies and the free tray belong to ONE MuJoCo model and clock. A real pre-inspection certificate authorizes a resource grant, actual transport changes capacity, and actual support/release plus fresh external views confirm placement. The isolated fixture and earlier scheduled-resource page remain separate archived experiments.
+
+First use the Recorded scenario selector and Load recorded comparison. Try the three position seeds, N5/k2, N6/k3, N7-to-N6 observer removal, right-hand grasp loss, a tight shared budget, disconnection and insufficient external observers. Read the four-policy table: a completed time horizon does not mean a successful task chain. The grasp fault occurs six seconds AFTER each policy's actual carry grant; check whether it triggered before interpreting that case.
+
+The primary comparison uses one prospective-viewpoint executor for fixed cyclic owners, nearest available-k owners, cyclic repair and geometric repair. It shares exact initial full states, targets, capacities, robot/object dynamics, carrier controller, workcell and evidence tests. This comparison isolates ownership-policy differences more directly than the older centroid stacks. Nearest available-k is a resource-constrained task baseline, not a global optimal constrained Voronoi solver.
+
+To compute a new comparison, set N=3..8, k=1..3, seed and5..60 s, then Apply / reset. Expand fault/communication/payload settings to change the carrier graph, range in meters, admitted byte-hop budget,1..3 kg tray and0.5..1.5 m travel. Observer removal requires k<=N-1 and at least13 s; ID3 is removed at12 s. Carrier ID1 remains physically present. Run toggles pause; One step advances all four actual fleets by0.1 s; display speed changes steps per animation frame only. Changes retain the displayed result until you apply them. Invalid settings show an error without silently changing an old run.
+
+Select Detailed policy to inspect its actual articulated carrier, tray, hand forces, resources and event log. Every path and robot color follows its persistent physical ID. Gold is the tray; dashed circles are a shared reserved workcell. Colored sector bands are the CYCLIC REFERENCE, while job pies are actual coalitions. The waiting placement task is dependency-blocked, not an invisible completed job. Event-enriched recordings are sampled at least every0.5 s; the cursor chooses the latest recorded state at or before a common physical time, and each map labels its actual state timestamp. Live runs have0.1 s task sampling.
+
+The carrier begins at a pre-grasp fixture. Before grant it holds base yaw, torso and arms; only a reachable head-only camera slot is available. During actual transport/settling that slot becomes zero, even while an old lease still names it. A successful support/release notification restores the stationary camera slot. Hands are already occupied by the initial fixture, and autonomous pickup/retract/re-grasp transfer are outside this mission. A hand failure quarantines the payload and keeps resources occupied instead of fabricating recovery.
+
+End-to-end workflow success needs pre-inspection, a routed grant, actual carry/release/support and a fresh external confirmation. Background completion is reported separately. Carrier busy duration is integrated from real execution intervals, not a fixed release timer. H uses the same complete map for every method. Speed is measured in m/s, arm torque in N m and hand force in N; actuator work is not electrical energy. The communication ledger includes actual allocation, target, lifecycle, physical-state and observation packets. Mandatory topology discovery is charged before data admission, so the setting is not a strict full-radio throughput cap.
+
+The reference N counts active complete robots, including an occupied carrier. Occupation changes availability without changing N or gcd(N,k). Actual announced removal changes N and reconstructs the reference. For N7->6,k2, gcd changes1->2; during a carry at N6 the available cameras can be5 while the reference still has N6. The reference mass error can be tiny while a task is blocked by missing external views, a failed grasp or communication. Read integrated-theory.html before interpreting the arithmetic.
+
+Scrub the timeline to inspect grants, resource changes, grasp release and fault events. JSON exports contain joint/object state, task versions and packet/event histories. CSV exports keep background completion, end-to-end success, busy duration, N/k/gcd, H, bytes and native hand forces in separate columns. A physical placement disturbance invalidates confirmation evidence; a failed or missing certificate does not turn green when the horizon ends.
+
+Reproduce the new mission from the site directory:
+
+```text
+node scripts/install-physics.mjs
+node tests/integrated-tests.mjs
+node tests/integrated-viewer-harness.mjs
+node scripts/run-integrated-benchmarks.mjs
+node tests/validate-integrated-benchmarks.cjs
+node scripts/prepare-integrated-figures.cjs
+```
+
+Then run MATLAB scripts/plot_integrated_missions.m, build with node scripts/build.mjs and validate with node tests/validate-build.cjs. The runner saves40 full trial recordings under ignored research/integrated, plus compressed public comparison files under assets/result. All accepted previous figures remain. These are numerical experiments with conditional protocol proofs; browser rendering and hardware ROS2 remain unverified under the prior safety restrictions.

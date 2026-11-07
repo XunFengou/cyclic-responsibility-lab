@@ -22,6 +22,8 @@ jobs:
       - run: node tests/execution-viewer-harness.mjs
       - run: node tests/bimanual-viewer-harness.mjs
       - run: node tests/validate-execution-benchmarks.cjs
+      - run: node tests/integrated-viewer-harness.mjs
+      - run: node tests/validate-integrated-benchmarks.cjs
       - run: node tests/validate-tiago-benchmarks.cjs
       - run: node tests/validate-structure-benchmarks.cjs
       - run: npm run build

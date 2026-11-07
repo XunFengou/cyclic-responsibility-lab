@@ -1,5 +1,7 @@
 # Execution-aware distributed K-th allocation
 
+The new [integrated mission](Integrated_Mission.html) couples the fleet and tray in one shared physical task loop. This document preserves the earlier isolated experiment; read [integrated workflow theory](integrated-theory.html) for the new resource and dependency model.
+
 ## Why balanced loads produced only 12.44 percent
 
 The preserved TIAGo baseline equalizes assigned mass, not visible, executable work. A robot can own a target behind its camera, behind an obstacle, beyond range, above its head-tilt range, or while its execution channel is occupied. Two assigned robots can also provide nearly collinear views. No mass-balancing theorem excludes these situations.

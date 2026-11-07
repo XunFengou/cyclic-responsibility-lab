@@ -1,5 +1,7 @@
 # Dual-arm tray transport with an actual free object
 
+The new [integrated mission](Integrated_Mission.html) couples the fleet and tray in one shared physical task loop. This document preserves the earlier isolated experiment; read [integrated workflow theory](integrated-theory.html) for the new resource and dependency model.
+
 ## What the experiment demonstrates
 
 One TIAGo Pro is one mobile-manipulator agent. Its left and right arms share the base and torso and are resources of the same agent. A transport task reserves both arms of one robot; a dual-view inspection task needs two independently positioned robots. These two kinds of multiplicity are not interchangeable.

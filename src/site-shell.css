@@ -4,3 +4,5 @@
 .lab-nav{display:flex;flex-wrap:wrap;max-width:1480px;margin-left:auto;margin-right:auto}.lab-nav .brand{margin-right:auto}.document .lab-nav .brand{flex-basis:100%;margin-bottom:6px}.lab-nav a{color:var(--blue)}
 
 [hidden]{display:none!important}#exStatus[data-error=true],#biStatus[data-error=true]{color:#a0352b}.interface-panel .control-row{gap:12px}.interface-panel .control-row label{font-size:12px}.interface-panel input[type=number]{max-width:130px}#exEvents,#biChecks{max-height:300px;overflow:auto;font-size:11px}
+
+.workflow-strip{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin:12px 0 22px}.workflow-strip span{padding:11px 14px;background:#e5eff4;border:1px solid #c4d7e3;border-radius:9px;font-size:13px;font-weight:600}.workflow-strip b{color:#6d8291}.table-scroll{overflow-x:auto}.resource-cards{display:grid;grid-template-columns:1fr 1fr;gap:7px}.resource-cards p{padding:10px;background:#edf3f6;border-radius:7px;font-size:12px;margin:0}#imEvents{max-height:250px;overflow:auto;font-size:11px}#imStatus[data-error=true]{color:#a0352b}@media(max-width:800px){.resource-cards{grid-template-columns:1fr}}
