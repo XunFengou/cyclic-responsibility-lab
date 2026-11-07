@@ -213,3 +213,39 @@ node scripts/prepare-integrated-figures.cjs
 ```
 
 Then run MATLAB scripts/plot_integrated_missions.m, build with node scripts/build.mjs and validate with node tests/validate-build.cjs. The runner saves40 full trial recordings under ignored research/integrated, plus compressed public comparison files under assets/result. All accepted previous figures remain. These are numerical experiments with conditional protocol proofs; browser rendering and hardware ROS2 remain unverified under the prior safety restrictions.
+
+## Autonomous acquisition and handover
+
+Open [Choose, Grasp and Recover](Autonomous_Transport.html). This is the current autonomous manipulation extension; earlier fixed-carrier, pre-grasp fixture and allocation pages remain reproducible baselines.
+
+1. Select **N6 k2 · autonomous pickup**, press **Load recording**, then move the physical-time slider to the initial state. Every robot starts away from the object; all experimental jaws are open and grasp constraints are inactive.
+2. Select **Cyclic repair** for detail. Read the routed carrier bids, persistent carrier ID, contact certificate, support load and resource cards. The actual path and stage determine what happened; reaching the horizon is not success.
+3. Load **Mobility fault · safe set-down and takeover**. Follow the first carrier, measured emergency support load, release, stable dwell, different replacement ID, new contacts and fresh external inspection. The failed physical body remains parked in the same model.
+4. Compare all four policy rows and charts at the same physical time. Initial states, environment, payload, executor, budgets and detectors match within a scenario. Carry-relative fault trigger times depend on each policy's actual carry start. Some policies or seeds remain incomplete.
+5. Try the payload-ineligible, structural, disconnected, low-budget and insufficient-observer cases. No feasible carrier, no delivered grant or no evidence means no completed task. These cases are intentionally retained.
+6. Change N, k, seed, mass, fault or communication and press **Apply / reset**. **Run a new comparison** recomputes four articulated worlds locally; it can be slow. **One 0.1 s step** is useful for diagnosis. A complete live run can extend to 240 s of physical time. Export JSON/CSV before changing parameters.
+7. Scroll to **Recorded experiments · MP4** to play or download the native actual-state films. Their provenance files give hashes, sampled-state policy, decoded frame counts, duration and model version. They are recorded simulation, not real robots or native browser QA.
+
+The common H chart measures full-map nearest-k squared distance on active roles. It does not certify task execution. The dashed balance curve measures R_k reference load error; solid curves measure currently admitted task-load imbalance, with n/a when no work is active. Arm torque RMS is a control-input metric in N m; chassis speed is a state metric in m/s. Carrier occupation counts robot-seconds; byte-hops are routed accounting, not measured radio throughput.
+
+Busy or mobility-failed robots change available resources without changing cyclic N. Announced role retirement changes N_active and gcd while preserving N_phys and the parked body. The known continuous support bench and retained powered brake/arms are necessary for this recovery model. Structural failure is an incomplete countercase. Experimental contact-certified latches do not validate factory grippers, friction-only grasps, slipping, unknown-shape perception or total power-loss recovery.
+
+Reproduce from the public source checkout:
+
+```text
+node scripts/install-physics.mjs
+node tests/autonomous-tests.mjs
+node scripts/run-autonomous-benchmarks.mjs
+node tests/validate-autonomous-benchmarks.cjs
+node tests/autonomous-viewer-harness.mjs
+node scripts/build.mjs
+node tests/validate-build.cjs
+```
+
+The MP4 renderer additionally needs native Python MuJoCo 3.8.1, Pillow, NumPy and imageio-ffmpeg. Pass the full actual-state recording to `scripts/render-autonomous-video.py`; the public compressed viewer recordings intentionally omit many physical samples. Model and measurement assumptions are in [the autonomous theory document](autonomous-theory.html).
+
+The autonomous benchmark includes twelve paired scenarios (48 trials), including a 1 kg case that expands the eligible carrier pool and a 3 kg case that has none. The bidder's payload limits are declared experimental capacities, not TIAGo Pro product ratings. Inspect the received bid list and actual carrier history to distinguish feasibility screening from physical success.
+
+The 1 kg expanded-carrier recording deliberately retains an acquisition failure: robot4 passes the static reach/payload screen, but moves the object during arm approach. A sampled displacement guard stops and quarantines it without a grasp certificate. This illustrates why a feasible IK bid alone is not a dynamic manipulation guarantee.
+
+Check contact penetration and joint-limit excess in the resource cards. The light-payload case is rejected as physically feasible: it retains a soft-limit violation and an unsupported disturbance despite acquisition being stopped. Passing the protocol/recording audit does not make every trial physically safe. Only the explicitly successful task records receive a success score; failed and physically rejected counterexamples remain visible.

@@ -1,0 +1,31 @@
+{
+  "status": "passed",
+  "input": "D:\\Codex\\2026-10-26\\referenced-chatgpt-conversation-this-is-an\\site\\research\\autonomous\\video-handover.json",
+  "inputSha256": "bdc48aab3327001fb4e6b3de45003efb762ea1e8f288f34fd7cc597b6882f2a8",
+  "output": "D:\\Codex\\2026-10-26\\referenced-chatgpt-conversation-this-is-an\\site\\assets\\result\\autonomous-handover.mp4",
+  "outputSha256": "f11909ab9e62c65705413be083879d75abadebddc3d205c8537a1e0fb3ee8d65",
+  "bytes": 1237327,
+  "width": 1280,
+  "height": 720,
+  "fps": 10,
+  "frames": 1301,
+  "sourceFirstTime": 0,
+  "sourceLastTime": 199.99999999999292,
+  "renderedLastTime": 130,
+  "truncated": true,
+  "mujoco": "3.8.1",
+  "sceneSha256": [
+    "1004ab47edf3ee890b79d9d4cd29ef4afc294bd8656b061cc2ac12e20a0e24a8"
+  ],
+  "statePolicy": "Forward-kinematic rendering of actual logged qpos; zero-order hold between samples; no physics rollout or pose interpolation",
+  "visualChanges": "Visible primitive collision-geometry groups, lighting, persistent per-robot colors and decorative actual base-history lines only",
+  "validation": {
+    "decodedFrames": 1301,
+    "durationSeconds": 130.1,
+    "decodeStatus": "passed"
+  },
+  "browserVerification": false,
+  "hardwareVerification": false,
+  "publicRecording": "autonomous-handover.recording.gz",
+  "recordingCompression": "gzip; inputSha256 hashes the decompressed JSON"
+}

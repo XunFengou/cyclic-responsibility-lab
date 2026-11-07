@@ -1,5 +1,11 @@
 [
   {
+    "title": "Autonomous acquisition and supported fault handover",
+    "href": "autonomous-theory.html",
+    "status": "Contact-certified experimental tool / same physical fleet",
+    "description": "Private IK, payload and resource bids select the carrier. Actual approach and grasp precede physical carry. Powered supported set-down enables a different carrier; quotient/Fourier classification stays at the cyclic reference layer."
+  },
+  {
     "title": "Cyclic operators and quotient groups",
     "href": "algebra-theory.html",
     "status": "Definitions and proofs",

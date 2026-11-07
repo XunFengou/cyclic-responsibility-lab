@@ -200,3 +200,9 @@ updates preserve the existing audience; changing it requires an owner request.
 
 Deployment credentials are short-lived and supplied only through the supported
 publishing helper's stdin. They are never stored in source or browser code.
+
+## Autonomous acquisition and supported handover
+
+The current extension is `src/Autonomous_Transport.html`, implemented by `autonomous-mission.mjs` and `acquisition-plant.mjs`. Read `docs/Autonomous_Acquisition.md` and the operating guide before interpreting success. All executing robots start away from the object with open experimental jaws. Private IK/payload/resource bids select the carrier; actual contact acquisition and supported fault takeover retain one free object and physical fleet. The older fixed-carrier mission remains an archived baseline.
+
+Run `node tests/autonomous-tests.mjs`, `node scripts/run-autonomous-benchmarks.mjs`, `node tests/validate-autonomous-benchmarks.cjs` and `node tests/autonomous-viewer-harness.mjs`. Exact-state MP4 rendering is provided by `scripts/render-autonomous-video.py`; native Python MuJoCo3.8.1, Pillow, NumPy and imageio-ffmpeg are required. Public MP4/provenance assets are included. A successful workflow does not imply factory gripper validation, friction-only grasp stability, whole-body collision-free convergence or hardware operation.

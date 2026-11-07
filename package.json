@@ -1,20 +1,21 @@
 {
   "name": "cyclic-responsibility-research-lab",
-  "version": "10.0.0",
+  "version": "11.0.0",
   "private": true,
   "description": "Canonical website source for cyclic responsibility and distributed multi-dynamics sector coverage.",
   "scripts": {
-    "test": "node tests/run-tests.cjs && node tests/obstacle-tests.cjs && node tests/structure-tests.cjs && node tests/lab-tests.cjs && node tests/tiago-tests.mjs && node tests/execution-tests.mjs && node tests/bimanual-tests.mjs && node tests/integrated-tests.mjs",
+    "test": "node tests/run-tests.cjs && node tests/obstacle-tests.cjs && node tests/structure-tests.cjs && node tests/lab-tests.cjs && node tests/tiago-tests.mjs && node tests/execution-tests.mjs && node tests/bimanual-tests.mjs && node tests/integrated-tests.mjs && node tests/autonomous-tests.mjs",
     "build": "node scripts/build.mjs",
     "preview": "node scripts/serve.mjs",
-    "test:viewer": "node tests/viewer-harness.cjs && node tests/comparison-viewer-harness.cjs && node tests/structure-viewer-harness.cjs && node tests/lab-viewer-harness.cjs && node tests/ros2-viewer-harness.cjs && node tests/tiago-viewer-harness.mjs && node tests/execution-viewer-harness.mjs && node tests/bimanual-viewer-harness.mjs && node tests/integrated-viewer-harness.mjs",
+    "test:viewer": "node tests/viewer-harness.cjs && node tests/comparison-viewer-harness.cjs && node tests/structure-viewer-harness.cjs && node tests/lab-viewer-harness.cjs && node tests/ros2-viewer-harness.cjs && node tests/tiago-viewer-harness.mjs && node tests/execution-viewer-harness.mjs && node tests/bimanual-viewer-harness.mjs && node tests/integrated-viewer-harness.mjs && node tests/autonomous-viewer-harness.mjs",
     "physics:install": "node scripts/install-physics.mjs",
     "experiments:tiago": "node scripts/run-tiago-benchmarks.mjs",
     "experiments": "node scripts/run-research.cjs",
     "experiments:obstacles": "node scripts/run-obstacle-benchmarks.cjs",
     "experiments:structure": "node scripts/run-structure-benchmarks.cjs",
     "experiments:execution": "node scripts/run-execution-benchmarks.mjs",
-    "experiments:integrated": "node scripts/run-integrated-benchmarks.mjs"
+    "experiments:integrated": "node scripts/run-integrated-benchmarks.mjs",
+    "experiments:autonomous": "node scripts/run-autonomous-benchmarks.mjs"
   },
   "engines": {
     "node": ">=20"
